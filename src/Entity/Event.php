@@ -32,6 +32,9 @@ class Event
     #[ORM\Column]
     private ?\DateTime $event_end = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $event_detail = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -105,6 +108,18 @@ class Event
     public function setEventEnd(\DateTime $event_end): static
     {
         $this->event_end = $event_end;
+
+        return $this;
+    }
+
+    public function getEventDetail(): ?string
+    {
+        return $this->event_detail;
+    }
+
+    public function setEventDetail(?string $event_detail): static
+    {
+        $this->event_detail = $event_detail;
 
         return $this;
     }
