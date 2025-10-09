@@ -2,18 +2,21 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{% block title %}Téléciné{% endblock %}</title>
         {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
         {% endblock %}
 
         {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
-    <body>
+    <body class="w-full h-screen">
 
         {% include 'partials/_header.html.twig'  %}
 
-        {% block body %}{% endblock %}
+        {% block main %}{% endblock %}
 
         {% include 'partials/_footer.html.twig'  %}
     </body>

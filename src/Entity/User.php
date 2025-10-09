@@ -6,18 +6,18 @@ use App\Enum\Country;
 use App\Enum\User_Role;
 use App\Enum\User_Status;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User
 {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column]
+    #[ORM\Column(name: "user_id", type: "integer")]
     private ?int $user_id = null;
 
     #[ORM\Column(length: 50)]
@@ -44,9 +44,23 @@ class User
     #[ORM\Column(enumType: User_Status::class)]
     private ?User_Status $user_status = null;
 
-    public function getId(): ?int
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Event::class, orphanRemoval: true)]
+    private Collection $events;
+
+    /**
+     * @var Collection<int, ReviewForm>
+     */
+    #[ORM\OneToMany(mappedBy: 'user',targetEntity: ReviewForm::class)]
+    private Collection $reviewForms;
+
+     #[ORM\OneToMany(mappedBy: 'user',targetEntity: TakePartIn::class)]
+    private Collection $participations;
+
+    public function __construct()
     {
-        return $this->id;
+        $this->events = new ArrayCollection();
+        $this->reviewForms = new ArrayCollection();
+        $this->participations = new ArrayCollection();
     }
 
     public function getUserId(): ?int
@@ -161,5 +175,70 @@ class User
         $this->user_status = $user_status;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Event>
+     */
+    public function getEvents(): Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent(Event $event): static
+    {
+        if (!$this->events->contains($event)) {
+            $this->events->add($event);
+            $event->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(Event $event): static
+    {
+        if ($this->events->removeElement($event)) {
+            // set the owning side to null (unless already changed)
+            if ($event->getUserId() === $this) {
+                $event->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ReviewForm>
+     */
+    public function getReviewForms(): Collection
+    {
+        return $this->reviewForms;
+    }
+
+    public function addReviewForm(ReviewForm $reviewForm): static
+    {
+        if (!$this->reviewForms->contains($reviewForm)) {
+            $this->reviewForms->add($reviewForm);
+            $reviewForm->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReviewForm(ReviewForm $reviewForm): static
+    {
+        if ($this->reviewForms->removeElement($reviewForm)) {
+            // set the owning side to null (unless already changed)
+            if ($reviewForm->getUserId() === $this) {
+                $reviewForm->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getParticipations(): Collection
+    {
+        return $this->participations;
     }
 }

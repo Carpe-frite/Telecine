@@ -3,18 +3,18 @@
 namespace App\Entity;
 
 use App\Repository\EventRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 class Event
 {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column]
+    #[ORM\Column(name: "event_id", type: "integer")]
     private ?int $event_id = null;
 
     #[ORM\Column(length: 150)]
@@ -35,9 +35,26 @@ class Event
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $event_detail = null;
 
-    public function getId(): ?int
+    #[ORM\Column(type: Types::SMALLINT)]
+    private ?int $event_max_participants = null;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "events")]
+    #[ORM\JoinColumn(name: "user_id", referencedColumnName: "user_id", nullable: false)]
+    private ?User $user = null;
+
+    /**
+     * @var Collection<int, ReviewForm>
+     */
+    #[ORM\OneToMany(targetEntity: ReviewForm::class, mappedBy: 'event', orphanRemoval: true)]
+    private Collection $reviewForms;
+
+    #[ORM\OneToMany(targetEntity: TakePartIn::class, mappedBy: 'event', orphanRemoval: true)]
+    private Collection $participants;
+
+    public function __construct()
     {
-        return $this->id;
+        $this->reviewForms = new ArrayCollection();
+        $this->participants = new ArrayCollection();
     }
 
     public function getEventId(): ?int
@@ -120,6 +137,61 @@ class Event
     public function setEventDetail(?string $event_detail): static
     {
         $this->event_detail = $event_detail;
+
+        return $this;
+    }
+
+    public function getEventMaxParticipants(): ?int
+    {
+        return $this->event_max_participants;
+    }
+
+    public function setEventMaxParticipants(int $event_max_participants): static
+    {
+        $this->event_max_participants = $event_max_participants;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+    
+
+    /**
+     * @return Collection<int, ReviewForm>
+     */
+    public function getReviewForms(): Collection
+    {
+        return $this->reviewForms;
+    }
+
+    public function addReviewForm(ReviewForm $reviewForm): static
+    {
+        if (!$this->reviewForms->contains($reviewForm)) {
+            $this->reviewForms->add($reviewForm);
+            $reviewForm->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReviewForm(ReviewForm $reviewForm): static
+    {
+        if ($this->reviewForms->removeElement($reviewForm)) {
+            // set the owning side to null (unless already changed)
+            if ($reviewForm->getEvent() === $this) {
+                $reviewForm->setEvent(null);
+            }
+        }
 
         return $this;
     }
