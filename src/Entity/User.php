@@ -8,13 +8,17 @@ use App\Enum\User_Status;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\DBAL\Types\Types;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USER_NAME', fields: ['user_name'])]
+#[UniqueEntity(fields: ['user_name'], message: 'There is already an account with this user_name')]
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: "user_id", type: "integer")]
@@ -23,26 +27,32 @@ class User
     #[ORM\Column(length: 50)]
     private ?string $user_name = null;
 
+    /**
+     * @var list<string> The user roles
+     */
+    #[ORM\Column(name: "user_role")]
+    private array $roles = [];
+
     #[ORM\Column(length: 100)]
     private ?string $user_email = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $user_dob = null;
 
-    #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true, enumType: Country::class)]
-    private ?array $user_country = null;
+    #[ORM\Column(nullable: true, enumType: Country::class)]
+    private ?Country $user_country = null;
 
-    #[ORM\Column(type: Types::SIMPLE_ARRAY, enumType: User_Role::class)]
-    private array $user_role = [];
-
-    #[ORM\Column(length: 60)]
-    private ?string $user_password = null;
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column(name: "user_password")]
+    private ?string $password = null;
 
     #[ORM\Column]
-    private ?int $user_xp = null;
+    private ?int $user_xp = 0;
 
     #[ORM\Column(enumType: User_Status::class)]
-    private ?User_Status $user_status = null;
+    private ?User_Status $user_status = User_status::active;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Event::class, orphanRemoval: true)]
     private Collection $events;
@@ -68,13 +78,6 @@ class User
         return $this->user_id;
     }
 
-    public function setUserId(int $user_id): static
-    {
-        $this->user_id = $user_id;
-
-        return $this;
-    }
-
     public function getUserName(): ?string
     {
         return $this->user_name;
@@ -85,6 +88,67 @@ class User
         $this->user_name = $user_name;
 
         return $this;
+    }
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->user_name;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    /**
+     * @param list<string> $roles
+     */
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): static
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * Ensure the session doesn't contain actual password hashes by CRC32C-hashing them, as supported since Symfony 7.3.
+     */
+    public function __serialize(): array
+    {
+        $data = (array) $this;
+        $data["\0".self::class."\0password"] = hash('crc32c', $this->password);
+
+        return $data;
+    }
+
+    #[\Deprecated]
+    public function eraseCredentials(): void
+    {
+        // @deprecated, to be removed when upgrading to Symfony 8
     }
 
     public function getUserEmail(): ?string
@@ -114,41 +178,14 @@ class User
     /**
      * @return Country[]|null
      */
-    public function getUserCountry(): ?array
+    public function getUserCountry(): ?Country
     {
         return $this->user_country;
     }
 
-    public function setUserCountry(?array $user_country): static
+    public function setUserCountry(?Country $user_country): static
     {
         $this->user_country = $user_country;
-
-        return $this;
-    }
-
-    /**
-     * @return User_Role[]
-     */
-    public function getUserRole(): array
-    {
-        return $this->user_role;
-    }
-
-    public function setUserRole(array $user_role): static
-    {
-        $this->user_role = $user_role;
-
-        return $this;
-    }
-
-    public function getUserPassword(): ?string
-    {
-        return $this->user_password;
-    }
-
-    public function setUserPassword(string $user_password): static
-    {
-        $this->user_password = $user_password;
 
         return $this;
     }
@@ -189,7 +226,7 @@ class User
     {
         if (!$this->events->contains($event)) {
             $this->events->add($event);
-            $event->setUserId($this);
+            $event->setUser($this);
         }
 
         return $this;
@@ -199,8 +236,8 @@ class User
     {
         if ($this->events->removeElement($event)) {
             // set the owning side to null (unless already changed)
-            if ($event->getUserId() === $this) {
-                $event->setUserId(null);
+            if ($event->getUser() === $this) {
+                $event->setUser(null);
             }
         }
 
@@ -219,7 +256,7 @@ class User
     {
         if (!$this->reviewForms->contains($reviewForm)) {
             $this->reviewForms->add($reviewForm);
-            $reviewForm->setUserId($this);
+            $reviewForm->setUser($this);
         }
 
         return $this;
@@ -229,16 +266,41 @@ class User
     {
         if ($this->reviewForms->removeElement($reviewForm)) {
             // set the owning side to null (unless already changed)
-            if ($reviewForm->getUserId() === $this) {
-                $reviewForm->setUserId(null);
+            if ($reviewForm->getUser() === $this) {
+                $reviewForm->setUser(null);
             }
         }
 
         return $this;
     }
 
+    /**
+     * @return Collection<int, TakePartIn>
+     */
     public function getParticipations(): Collection
     {
         return $this->participations;
+    }
+
+    public function addParticipation(TakePartIn $participation): static
+    {
+        if (!$this->participations->contains($participation)) {
+            $this->participations->add($participation);
+            $participation->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParticipation(TakePartIn $participation): static
+    {
+        if ($this->participations->removeElement($participation)) {
+            // set the owning side to null (unless already changed)
+            if ($participation->getUser() === $this) {
+                $participation->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

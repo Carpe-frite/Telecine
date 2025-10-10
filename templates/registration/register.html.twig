@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block main %}
+    <h1>Bienvenue</h1>
+
+    {{ form_errors(registrationForm) }}
+
+    {{ form_start(registrationForm) }}
+        {{ form_row(registrationForm.user_name, { label: 'Identifiant' }) }}
+        {{ form_row(registrationForm.user_email, { label: 'E-mail' }) }}
+        {{ form_row(registrationForm.user_dob, { label: 'Date de naissance' }) }}
+        {{ form_row(registrationForm.user_country, { label: 'Pays' }) }}
+        {{ form_row(registrationForm.plainPassword, { label: 'Mot de passe' }) }}
+
+        <button type="submit" class="btn">Créer mon compte</button>
+
+    {{ form_end(registrationForm) }}
+{% endblock %}
