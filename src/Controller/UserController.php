@@ -10,12 +10,18 @@ class UserController extends AbstractController
 {
         public function new(Request $request): Response    {
         $user = new User();
-        $user->setName();
+        $user->setUserName();
+        $user->setUserEmail();
+        $user->setUserDob();
+        $user->setUserCountry();
+        $user->setUserPassword();
 
-        $form = $this->createFormBuilder($task)
-            ->add('task', TextType::class)
-            ->add('dueDate', DateType::class)
-            ->add('save', SubmitType::class, ['label' => 'Create Task'])
+        $form = $this->createFormBuilder($user)
+            ->add('userName', TextType::class)
+            ->add('userEmail', TextType::class)
+            ->add('userDob', DateTimeType::class)
+            ->add('userCountry', DateTimeType::class)
+            ->add('save', SubmitType::class, ['label' => 'Créer mon compte'])
             ->getForm();
     }    
 }
