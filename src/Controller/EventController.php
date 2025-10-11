@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Event;
+use App\Entity\TakePartIn;
 use App\Entity\User;
 use App\Form\EventFormType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -51,6 +52,7 @@ class EventController extends AbstractController
 
         if (!$event) {
             $this->addFlash('Séance introuvable', "Cette séance n'existe pas");
+            return $this->redirectToRoute('default_see_all_events');
         }
 
         return $this->render('event/event-detail.html.twig', ['event' => $event]);
@@ -68,7 +70,6 @@ class EventController extends AbstractController
         }
 
         $form = $this->createForm(EventFormType::class, $event);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -93,10 +94,33 @@ class EventController extends AbstractController
             return $this->redirectToRoute('default_see_all_events');
         }
         else {
-            $entityManager->remove($event);
-            $entityManager->flush();
+            if ($this->getUser() == $event->getUser() || $this->isGranted('ROLE_ADMIN')) { //On s'assure que seul l'utiisateur (ou un admin) ayant créé l'event puisse le supprimer
+                $entityManager->remove($event);
+                $entityManager->flush();
+                return $this->redirectToRoute('default_see_all_events');
+            }
+            else {
+                return $this->redirectToRoute('default_see_all_events');
+            }
         }
-
-        return $this->redirectToRoute('default_see_all_events');
     }
+
+    #[Route('/take-part-in-event-{id}', name: 'event_take_part_in_event', methods: ['GET', 'POST'])]
+    public function takePartInEvent(int $id, EntityManagerInterface $entityManager):Response
+    {    
+        $user = $this->getUser();
+        $event = $entityManager->getRepository(Event::class)->find($id);
+
+        $eventParticipation = new TakePartIn();
+        $eventParticipation->setUser($user);
+        $eventParticipation->setEvent($event);
+        $eventParticipation->setUserHasConfirmed(false);
+
+        $entityManager->persist($eventParticipation);
+        $entityManager->flush($eventParticipation);
+
+        return $this->redirectToRoute('event_show_event', ['id' => $id]);
+
+    }
+
 }
