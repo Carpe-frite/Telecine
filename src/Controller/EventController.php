@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class EventController extends AbstractController
 {
-    #[Route('/create-event', name: 'default_create_event', methods: ['GET','POST'])]
+    #[Route('/create-event', name: 'event_create_event', methods: ['GET','POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $event = new Event();
@@ -41,5 +41,62 @@ class EventController extends AbstractController
             'eventForm' => $form,
         ]);
 
+    }
+
+    #[Route('/show-event-{id}', name: 'event_show_event', methods: ['GET'])]
+    public function showEvent(int $id, EntityManagerInterface $entityManager):Response
+    {    
+
+        $event = $entityManager->getRepository(Event::class)->find($id);
+
+        if (!$event) {
+            $this->addFlash('Séance introuvable', "Cette séance n'existe pas");
+        }
+
+        return $this->render('event/event-detail.html.twig', ['event' => $event]);
+    }
+
+    #[Route('/edit-event-{id}', name: 'event_edit_event', methods: ['GET', 'POST'])]
+    public function editEvent(Request $request, int $id, EntityManagerInterface $entityManager):Response
+    {    
+
+        $event = $entityManager->getRepository(Event::class)->find($id);
+
+        if (!$event) {
+            $this->addFlash('Séance introuvable', "Cette séance n'existe pas");
+            return $this->redirectToRoute('default_see_all_events');
+        }
+
+        $form = $this->createForm(EventFormType::class, $event);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $event= $form->getData();
+
+            $entityManager->flush();    
+            $this->addFlash('Séance modifiée', "La séance a été modifiée avec succès");
+            return $this->redirectToRoute('default_see_all_events');
+        }
+
+        return $this->render('event/edit-event.html.twig', ['event' => $event, 'eventForm' => $form]);
+        
+    }
+
+    #[Route('/delete-event-{id}', name: 'event_delete_event', methods: ['GET'])]
+    public function deleteEvent(int $id, EntityManagerInterface $entityManager):Response
+    {    
+        $event = $entityManager->getRepository(Event::class)->find($id);
+
+        if (!$event) {
+            $this->addFlash('Séance introuvable', "Cette séance n'existe pas");
+            return $this->redirectToRoute('default_see_all_events');
+        }
+        else {
+            $entityManager->remove($event);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('default_see_all_events');
     }
 }
