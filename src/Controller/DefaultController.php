@@ -28,12 +28,6 @@ class DefaultController extends AbstractController
         return $this->render('default/see-all-events.html.twig', ['events' => $events]);
     }
 
-    #[Route('/sign-up', name: 'sign_up', methods: ['GET'])]
-    public function signUp()
-    {
-        return $this->render('default/sign-up.html.twig');
-    }
-
     #[Route('/categorie/{type}', name: 'default_category', methods: ['GET'])]
     public function category($type)
     {

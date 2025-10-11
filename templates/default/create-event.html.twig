@@ -1,0 +1,20 @@
+{% extends "base.html.twig"  %}
+
+{% block main %}
+    <main class="relative w-[1000px] h-17/20 left-1/2 -translate-x-1/2 mt-12 bg-neutral-300">
+
+            <div id="column-1" class="justify-self-end">
+                {{ form_errors(eventForm) }}
+
+                {{ form_start(eventForm) }}
+                     {{ form_row(eventForm.event_name, { label: 'Nom de la séance :' }) }}    
+                    <button type="submit" class="btn">Créer ma séance</button>
+
+                {{ form_end(eventForm) }}
+            </div>
+            
+        </div>
+
+    </main>
+
+{% endblock %}
