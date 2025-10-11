@@ -14,16 +14,27 @@
                     <div id="event1" class="w-[490px] h-[205px] bg-neutral-300"></div>
                     <div id="event2" class="w-[490px] h-[205px] bg-neutral-300"></div>
                     <div id="event3" class="w-[490px] h-[205px] bg-neutral-300">
+                    {% if app.user == event.getUser %}
                     <div>
-                    <a href="{{path('event_delete_event', { 'id' : event.eventId}) }}">
-                        <div class="bg-red-200 w-[210px] h-[50px]">Supprimer la séance</div>
-                    </a>
+                        <a href="{{path('event_delete_event', { 'id' : event.eventId}) }}">
+                            <div class="bg-red-200 w-[210px] h-[50px]">Supprimer la séance</div>
+                        </a>
                     </div>
                     <div>
                     <a href="{{path('event_edit_event', { 'id' : event.eventId}) }}">
                         <div class="bg-neutral-500 w-[210px] h-[50px]">Modifier la séance</div>
                     </a>
                     </div>
+                    {% endif %}
+
+                    {% if app.user != event.getUser %}
+                    <div>
+                    <a href="{{path('event_take_part_in_event', { 'id' : event.eventId}) }}">
+                        <div class="bg-neutral-500 w-[210px] h-[50px]">Rejoindre la séance</div>
+                    </a>
+                    </div>
+                    {% endif %}
+
                     </div>
                 </div>
             </div>

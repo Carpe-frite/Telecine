@@ -14,13 +14,19 @@
                     <li><a href="/sign-in"><div class="bg-neutral-500 w-[210px] h-[50px]">Connexion</div></a></li>
                     <li><a href="/sign-up"><div class="bg-neutral-500 w-[210px] h-[50px]">Inscription</div></a></li>
                 {% endif %}
+                {% if app.user %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <li><a href="/admin"><div class="bg-neutral-500 w-[210px] h-[50px]">Administration</div></a></li>
+                    {% endif %}
+                {% endif %}
             </ul>
     </div>
 
-    {% if app.user %}
-    <div class="mb-3">
-        {{ app.user.userIdentifier }} <a href='/sign-out'>Se déconnecter</a>
-    </div>
+   {% if app.user %}
+        <div class="mb-3">
+            {{ app.user.userIdentifier }} <a href='/sign-out'>Se déconnecter</a>
+        </div>
     {% endif %}
+
 
 </header>

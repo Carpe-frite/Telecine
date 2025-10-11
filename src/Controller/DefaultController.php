@@ -15,6 +15,12 @@ class DefaultController extends AbstractController
         return $this->render('default/home.html.twig');
     }
 
+    #[Route('/admin', name: 'default_admin', methods: ['GET'])]
+    public function admin()
+    {
+        return $this->render('default/admin.html.twig');
+    }
+
     #[Route('/about', name: 'default_about', methods: ['GET'])]
     public function about()
     {
@@ -26,18 +32,6 @@ class DefaultController extends AbstractController
     {
         $events = $eventRepository->findAll();
         return $this->render('default/see-all-events.html.twig', ['events' => $events]);
-    }
-
-    #[Route('/categorie/{type}', name: 'default_category', methods: ['GET'])]
-    public function category($type)
-    {
-        return new Response(content: "<h1>Catégorie : $type</h1>");
-    }
-
-    #[Route('/{category}/{title}_{id}', name: 'default_event', methods: ['GET'])]
-    public function event($category,$title,$id)
-    {
-        return new Response(content: "<h1>Catégorie : $category<br>Titre : $title<br>ID : $id </h1>");
     }
 }
 
