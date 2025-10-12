@@ -1,0 +1,26 @@
+<div id="event" class="flex w-[490px] h-[205px] bg-neutral-300">
+    <a href="/show-event-{{ event.eventId }}" class="flex w-full h-full">
+        <img class="flex  w-32 h-full max-w-[206px]" src="{{ asset('images/placeholder_poster.webp') }}" alt="Poster de la séance">
+        <div class="flex flex-col p-4 flex-1">
+            <div>
+                <h1> {{ event.eventName }} | {{ event.eventDate|date("d/m/Y") }} </h1>
+                <p>Science-fiction, Aventure</p>
+            </div>
+            <p> Proposé par : <b>{{ event.user.userName }}</b> </p>
+            <p class="line-clamp-3"> {{ event.eventDetail }}</p>
+            <ul class="flex space-x-2 mt-2">
+                {% for participation in event.participants %}
+                    <li class="w-6">
+                        <img src="{{ asset('icons/user_icon.png') }}" alt="Icone utilisateur"></i>
+                    </li>
+                {% endfor %}
+
+                {% if event.participants|length < event. eventMaxParticipants %}
+                    <li class="w-6">
+                        <img src="{{ asset('icons/add_user_icon.png') }}" alt="Icone utilisateur"></i>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </a>
+</div>

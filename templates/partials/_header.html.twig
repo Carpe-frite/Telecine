@@ -1,32 +1,36 @@
-<header class="relative flex flex-row w-screen h-[100px] min-h-[50px]">
+<header class="relative flex flex-row w-full h-[100px] min-h-[50px] justify-between">
 
-    <div class="relative">
-        <a href="/">
-            <img class="w-24 max-w-[100px]" src="{{ asset('images/telecine_logo.png') }}" alt="Logo Téléciné">
-        </a>
-    </div>
-
-    <div class="relative flex justify-center items-center h-full bg-neutral-300 w-[1000px] ml-4">
-            <ul class="flex space-x-4">
-                <li><a href="/see-all-events"><div class="bg-neutral-500 w-[210px] h-[50px]">Liste des séances</div></a></li>
-                <li><a href="/create-event"><div class="bg-neutral-500 w-[210px] h-[50px]">Créer une séance</div></a></li>
-                {% if not app.user %}
-                    <li><a href="/sign-in"><div class="bg-neutral-500 w-[210px] h-[50px]">Connexion</div></a></li>
-                    <li><a href="/sign-up"><div class="bg-neutral-500 w-[210px] h-[50px]">Inscription</div></a></li>
-                {% endif %}
-                {% if app.user %}
-                    {% if is_granted('ROLE_ADMIN') %}
-                    <li><a href="/admin"><div class="bg-neutral-500 w-[210px] h-[50px]">Administration</div></a></li>
-                    {% endif %}
-                {% endif %}
-            </ul>
-    </div>
-
-   {% if app.user %}
-        <div class="mb-3">
-            {{ app.user.userIdentifier }} <a href='/sign-out'>Se déconnecter</a>
+        <div class="relative left-4">
+            <a href="/">
+                <img class="w-24 max-w-[100px]" src="{{ asset('images/telecine_logo.png') }}" alt="Logo Téléciné">
+            </a>
         </div>
-    {% endif %}
 
+        <div class="relative flex justify-center place-content-center items-center h-full bg-neutral-300 min-w-[1000px] mr-16">
+                <ul class="flex space-x-4 w-full justify-center">
+                    <li><div class="bg-neutral-500 w-[210px] h-[50px] flex items-center justify-center"><a href="/see-all-events">Liste des séances</a></div></li>
+                    <li><div class="bg-neutral-500 w-[210px] h-[50px] flex items-center justify-center"><a href="/create-event">Créer une séance</a></div></li>
+                    {% if not app.user %}
+                        <li><div class="bg-neutral-500 w-[210px] h-[50px] flex items-center justify-center"><a href="/sign-in">Connexion</a></div></li>
+                        <li><div class="bg-neutral-500 w-[210px] h-[50px] flex items-center justify-center"><a href="/sign-up">Inscription</a></div></li>
+                    {% endif %}
+                    {% if app.user %}
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <li><div class="bg-neutral-500 w-[210px] h-[50px] flex items-center justify-center"><a href="/admin">Administration</a></div></li>
+                        {% endif %}
+                    {% endif %}
+                    {% if app.user %}
+                            <div class="mb-3">
+                               <div class="bg-neutral-500 w-[210px] h-[50px] flex items-center justify-center"><a href='/sign-out'>Se déconnecter</a></div>
+                            </div>
+                        {% endif %}
+                </ul>
+        </div>
+
+        <div class="relative flex mr-8>">
+        {% if app.user %}
+        {{ app.user.userIdentifier }}   
+        {% endif %}
+        </div>
 
 </header>

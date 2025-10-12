@@ -1,32 +1,36 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Se connecter{% endblock %}
 
 {% block main %}
-    <form method="post">
-        {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
+    <main class="flex w-full h-14/20 justify-center mt-12">
+            <div id="core-view" class="relative w-[1000px] flex flex-row justify-center gap-x-4 bg-neutral-50">
+                <form method="post">
+                    {% if error %}
+                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                    {% endif %}
 
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-        <label for="username">Identifiant</label>
-        <input type="text" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="username" required autofocus>
-        <label for="password">Mot de passe</label>
-        <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
-        <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+                    <h1 class="h3 mb-3 font-weight-normal">Bienvenue</h1>
+                    <label for="username" class="mb-1 text-sm font-semibold text-neutral-700">Identifiant</label>
+                    <input type="text" value="{{ last_username }}" name="_username" id="username" class="form-control border border-neutral-400 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-neutral-700" autocomplete="username" required autofocus>
+                    <label for="password" class="mb-1 text-sm font-semibold text-neutral-700">Mot de passe</label>
+                    <input type="password" name="_password" id="password" class="form-control border border-neutral-400 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-neutral-700" autocomplete="current-password" required>
+                    <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
 
-        {#
-            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-            See https://symfony.com/doc/current/security/remember_me.html
+                    {#
+                        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+                        See https://symfony.com/doc/current/security/remember_me.html
 
-            <div class="checkbox mb-3">
-                <input type="checkbox" name="_remember_me" id="_remember_me">
-                <label for="_remember_me">Remember me</label>
-            </div>
-        #}
+                        <div class="checkbox mb-3">
+                            <input type="checkbox" name="_remember_me" id="_remember_me">
+                            <label for="_remember_me">Remember me</label>
+                        </div>
+                    #}
 
-        <button class="btn btn-lg btn-primary" type="submit">
-            Se connecter
-        </button>
-    </form>
+                    <button class="btn bg-neutral-500 w-[210px] h-[50px] flex items-center justify-center" type="submit">
+                        Se connecter
+                    </button>
+                </form>
+        </div>
+    </main>
 {% endblock %}

@@ -1,18 +1,59 @@
 {% extends "base.html.twig"  %}
 
 {% block main %}
-    <main class="relative w-[1000px] h-17/20 left-1/2 -translate-x-1/2 mt-12 bg-neutral-300">
+    <main class="relative w-[1000px] h-14/20 left-1/2 -translate-x-1/2 mt-12 bg-neutral-300">
 
-            <div id="column-1" class="justify-self-end">
-                {{ form_errors(eventForm) }}
+        <div id="core-view" class="relative w-[1000px]">
+            <h1 class="absolute">Modifier une séance</h1>
+            <div id="column-1" class="relative w-full flex flex-row gap-y-4 justify-between">     
+                <div class="relative w-1/2 flex justify-center mt-12"> 
+                    {{ form_errors(eventForm) }}
 
-                {{ form_start(eventForm, {'id': event.eventId}) }}
-                     {{ form_row(eventForm.event_name, { label: 'Nom de la séance :' }) }}    
-                    <button type="submit" class="btn">Modifier ma séance</button>
+                    {{ form_start(eventForm) }}
+                        <div class="flex flex-col mb-4">
+                            {{ form_label(eventForm.event_name, 'Nom de la séance', {'label_attr': {'class': 'mb-1 text-sm font-semibold text-neutral-700'}}) }}
+                            {{ form_widget(eventForm.event_name, {'attr': {'class': 'border border-neutral-400 rounded-md p-2 focus:outline-none w-[450px] focus:ring-2 focus:ring-neutral-700'}}) }}
+                            {{ form_errors(eventForm.event_name) }}
+                        </div>
+                        <div class="flex flex-col mb-4">
+                            {{ form_label(eventForm.event_movie, 'Film projeté', {'label_attr': {'class': 'mb-1 text-sm font-semibold text-neutral-700'}}) }}
+                            {{ form_widget(eventForm.event_movie, {'attr': {'class': 'border border-neutral-400 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-neutral-700'}}) }}
+                            {{ form_errors(eventForm.event_movie) }}
+                        </div>
+                        <div class="flex flex-col mb-4">
+                            {{ form_label(eventForm.event_date, 'Date de la projection', {'label_attr': {'class': 'mb-1 text-sm font-semibold text-neutral-700'}}) }}
+                            {{ form_widget(eventForm.event_date, {'attr': {'class': 'border border-neutral-400 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-neutral-700'}}) }}
+                            {{ form_errors(eventForm.event_date) }}
+                        </div> 
+                        <div class="flex flex-col mb-4">
+                            {{ form_label(eventForm.event_max_participants, 'Participants max.', {'label_attr': {'class': 'mb-1 text-sm font-semibold text-neutral-700'}}) }}
+                            {{ form_widget(eventForm.event_max_participants, {'attr': {'class': 'border border-neutral-400 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-neutral-700'}}) }}
+                            {{ form_errors(eventForm.event_max_participants) }}
+                        </div> 
+                        <div class="flex flex-col mb-4">
+                            {{ form_label(eventForm.event_start, 'Début de la séance', {'label_attr': {'class': 'mb-1 text-sm font-semibold text-neutral-700'}}) }}
+                            {{ form_widget(eventForm.event_start, {'attr': {'class': 'border border-neutral-400 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-neutral-700'}}) }}
+                            {{ form_errors(eventForm.event_start) }}
+                        </div>  
+                        <div class="flex flex-col mb-4">
+                            {{ form_label(eventForm.event_end, 'Fin de la séance', {'label_attr': {'class': 'mb-1 text-sm font-semibold text-neutral-700'}}) }}
+                            {{ form_widget(eventForm.event_end, {'attr': {'class': 'border border-neutral-400 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-neutral-700'}}) }}
+                            {{ form_errors(eventForm.event_end) }}
+                        </div>  
+                        <div class="flex flex-col mb-4">
+                            {{ form_label(eventForm.event_detail, 'Détails', {'label_attr': {'class': 'mb-1 text-sm font-semibold text-neutral-700'}}) }}
+                            {{ form_widget(eventForm.event_detail, {'attr': {'class': 'border border-neutral-400 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-neutral-700'}}) }}
+                            {{ form_errors(eventForm.event_detail) }}
+                        </div>  
+                        <button type="submit" class="btn bg-neutral-500 w-[210px] h-[50px] flex items-center justify-center">Créer ma séance</button>
+                    {{ form_end(eventForm) }}
+                </div>
 
-                {{ form_end(eventForm) }}
-            </div>
-            
+                <div class="relative w-1/2 mt-12 flex justify-center">
+                    <img class="flex h-[445px] max-w-[525px]" src="{{ asset('images/placeholder_poster.webp') }}" alt="Poster de la séance">
+                </div>
+
+            </div>            
         </div>
 
     </main>

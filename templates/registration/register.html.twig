@@ -3,18 +3,59 @@
 {% block title %}Register{% endblock %}
 
 {% block main %}
-    <h1>Bienvenue</h1>
+    <main class="flex w-full h-14/20 justify-center mt-12">
+        <div id="core-view" class="relative w-[1000px] flex flex-row justify-center gap-x-4">
+            <div id="column-1" class="relative flex flex-col gap-y-4 bg-neutral-300 w-1/2">
 
-    {{ form_errors(registrationForm) }}
+                <h1>Bienvenue</h1>
+                {{ form_errors(registrationForm) }}
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.user_name, { label: 'Identifiant' }) }}
-        {{ form_row(registrationForm.user_email, { label: 'E-mail' }) }}
-        {{ form_row(registrationForm.user_dob, { label: 'Date de naissance' }) }}
-        {{ form_row(registrationForm.user_country, { label: 'Pays' }) }}
-        {{ form_row(registrationForm.plainPassword, { label: 'Mot de passe' }) }}
+                {{ form_start(registrationForm) }}
+                    <div class="flex flex-col mb-4">
+                        {{ form_label(registrationForm.user_name, 'Identifiant', {'label_attr': {'class': 'mb-1 text-sm font-semibold text-neutral-700'}}) }}
+                        {{ form_widget(registrationForm.user_name, {'attr': {'class': 'border border-neutral-400 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-neutral-700'}}) }}
+                        {{ form_errors(registrationForm.user_name) }}
+                    </div>
+                    <div class="flex flex-col mb-4">
+                        {{ form_label(registrationForm.user_email, 'E-mail', {'label_attr': {'class': 'mb-1 text-sm font-semibold text-neutral-700'}}) }}
+                        {{ form_widget(registrationForm.user_email, {'attr': {'class': 'border border-neutral-400 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-neutral-700'}}) }}
+                        {{ form_errors(registrationForm.user_email) }}
+                    </div>
+                    <div class="flex flex-col mb-4">
+                        {{ form_label(registrationForm.user_dob, 'Date de naissance', {'label_attr': {'class': 'mb-1 text-sm font-semibold text-neutral-700'}}) }}
+                        {{ form_widget(registrationForm.user_dob, {'attr': {'class': 'border border-neutral-400 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-neutral-700'}}) }}
+                        {{ form_errors(registrationForm.user_dob) }}
+                    </div>
+                    <div class="flex flex-col mb-4">
+                        {{ form_label(registrationForm.user_country, 'Pays', {'label_attr': {'class': 'mb-1 text-sm font-semibold text-neutral-700'}}) }}
+                        {{ form_widget(registrationForm.user_country, {'attr': {'class': 'border border-neutral-400 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-neutral-700'}}) }}
+                        {{ form_errors(registrationForm.user_country) }}
+                    </div>
+                    <div class="flex flex-col mb-4">
+                        {{ form_label(registrationForm.plainPassword.first, 'Mot de passe', {'label_attr': {'class': 'mb-1 text-sm font-semibold text-neutral-700'}}) }}
+                        {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'border border-neutral-400 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-neutral-700'}}) }}
+                        {{ form_errors(registrationForm.plainPassword.first) }}
+                    </div>
+                    <div class="flex flex-col mb-4">
+                        {{ form_label(registrationForm.plainPassword.second, 'Confirmez votre mot de passe', {'label_attr': {'class': 'mb-1 text-sm font-semibold text-neutral-700'}}) }}
+                        {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'border border-neutral-400 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-neutral-700'}}) }}
+                        {{ form_errors(registrationForm.plainPassword.second) }}
+                    </div>
 
-        <button type="submit" class="btn">Créer mon compte</button>
+                    <button type="submit" class="btn bg-neutral-500 w-[210px] h-[50px] flex items-center justify-center">Créer mon compte</button>
 
-    {{ form_end(registrationForm) }}
+                {{ form_end(registrationForm) }}        
+            </div>
+
+            <div id="column-2" class="justify-self-end w-1/2">
+                <div id="latest-events" class="relative flex flex-col gap-y-4">
+                    {% for event in events %}
+                    {% include 'partials/_event_container.html.twig'  %}
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+    </main>
+
 {% endblock %}

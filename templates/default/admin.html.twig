@@ -1,24 +1,17 @@
 {% extends "base.html.twig"  %}
 
 {% block main %}
-    <main class="relative w-[1000px] h-17/20 left-1/2 -translate-x-1/2 mt-12">
+    <main class="relative w-[1000px] h-14/20 left-1/2 -translate-x-1/2 mt-12">
 
-        <div id="core-view" class="relative w-[1000px] flex flex-row justify-between">
-            <div id="column-1" class="relative flex flex-col gap-y-4">
-                <div id="telecine-intro" class="w-[490px] h-[425px] bg-neutral-300"></div>
-                <p>ADMIN</p>
-                <div id="quick-login" class="w-[490px] h-[205px] bg-neutral-300"></div>            
-            </div>
-
-            <div id="column-2" class="justify-self-end">
-                <div id="latest-events" class="relative flex flex-col gap-y-4">
-                    <div id="event1" class="w-[490px] h-[205px] bg-neutral-300"></div>
-                    <div id="event2" class="w-[490px] h-[205px] bg-neutral-300"></div>
-                    <div id="event3" class="w-[490px] h-[205px] bg-neutral-300"></div>
-                </div>
-            </div>
-            
+    <div id="column-2" class="justify-between">
+        <div id="latest-events" class="grid grid-cols-2 gap-y-4 gap-x-4">
+            {% for event in events %}
+                {% include 'partials/_event_container.html.twig'  %}
+            {% endfor %}
         </div>
+        </div>
+        
+    </div>
 
     </main>
 

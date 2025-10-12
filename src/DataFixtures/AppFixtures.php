@@ -15,10 +15,10 @@ class AppFixtures extends Fixture
     {
 
         $user= new User();
-        $user->setUserName('Jeanpierre67');
-        $user->setUserEmail('jeanpierre67@wanadoo.fr');
-        $user->setRoles(['ROLE_USER']);
-        $user->setPassword('1234');
+        $user->setUserName('JeanAdmin67');
+        $user->setUserEmail('jeanadmin67@wanadoo.fr');
+        $user->setRoles(['ROLE_ADMIN']);
+        $user->setPassword('okok1234');
         $user->setUserXP(0);
         $user->setUserStatus(User_status::active);
         $manager->persist($user);
@@ -33,6 +33,7 @@ class AppFixtures extends Fixture
             $event->setEventStart(new \DateTime('2011-06-05 12:15:00'));
             $event->setEventEnd(new \DateTime('2011-06-05 15:15:00'));
             $event->setEventMaxParticipants(5);
+            $event->setEventIsValidated(true);
             $event->setUser($user);
             $manager->persist($event);
         }

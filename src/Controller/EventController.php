@@ -21,7 +21,7 @@ class EventController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $event = new Event();
-        $event->setEventName('Nom de votre évènement');
+        //$event->setEventName('Nom de votre évènement');
 
         $form = $this->createForm(EventFormType::class, $event);
 
@@ -32,8 +32,23 @@ class EventController extends AbstractController
             $user = $this->getUser();
             $event->setUser($user);
 
+            if (in_array("ROLE_ADMIN", $user->getRoles())) {
+                $event->setEventIsValidated(true);
+            }
+            else {
+                $event->setEventIsValidated(false);
+            }
+
             $entityManager->persist($event);
             $entityManager->flush();    
+
+            $eventParticipation = new TakePartIn();
+            $eventParticipation->setUser($user);
+            $eventParticipation->setEvent($event);
+            $eventParticipation->setUserHasConfirmed(true);
+
+            $entityManager->persist($eventParticipation);
+            $entityManager->flush($eventParticipation);
 
             return $this->redirectToRoute('default_see_all_events');
         }
@@ -105,8 +120,8 @@ class EventController extends AbstractController
         }
     }
 
-    #[Route('/take-part-in-event-{id}', name: 'event_take_part_in_event', methods: ['GET', 'POST'])]
-    public function takePartInEvent(int $id, EntityManagerInterface $entityManager):Response
+    #[Route('/take-part-in-event-{id}/{confirm}', name: 'event_take_part_in_event', methods: ['GET', 'POST'])]
+    public function takePartInEvent(int $id, bool $confirm, EntityManagerInterface $entityManager):Response
     {    
         $user = $this->getUser();
         $event = $entityManager->getRepository(Event::class)->find($id);
@@ -114,7 +129,7 @@ class EventController extends AbstractController
         $eventParticipation = new TakePartIn();
         $eventParticipation->setUser($user);
         $eventParticipation->setEvent($event);
-        $eventParticipation->setUserHasConfirmed(false);
+        $eventParticipation->setUserHasConfirmed($confirm.(boolval("true") ? 'true' : 'false'));
 
         $entityManager->persist($eventParticipation);
         $entityManager->flush($eventParticipation);

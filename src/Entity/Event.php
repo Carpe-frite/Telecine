@@ -51,6 +51,9 @@ class Event
     #[ORM\OneToMany(targetEntity: TakePartIn::class, mappedBy: 'event', orphanRemoval: true)]
     private Collection $participants;
 
+    #[ORM\Column]
+    private ?bool $event_is_validated = null;
+
     public function __construct()
     {
         $this->reviewForms = new ArrayCollection();
@@ -153,6 +156,11 @@ class Event
         return $this;
     }
 
+    public function getParticipants(): Collection
+{
+    return $this->participants;
+}
+
     public function getUser(): ?User
     {
         return $this->user;
@@ -192,6 +200,18 @@ class Event
                 $reviewForm->setEvent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isEventIsValidated(): ?bool
+    {
+        return $this->event_is_validated;
+    }
+
+    public function setEventIsValidated(bool $event_is_validated): static
+    {
+        $this->event_is_validated = $event_is_validated;
 
         return $this;
     }
