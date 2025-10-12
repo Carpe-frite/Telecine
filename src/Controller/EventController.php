@@ -21,6 +21,7 @@ class EventController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $event = new Event();
+                    
         //$event->setEventName('Nom de votre évènement');
 
         $form = $this->createForm(EventFormType::class, $event);
@@ -28,7 +29,6 @@ class EventController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $event= $form->getData();
-
             $user = $this->getUser();
             $event->setUser($user);
 
@@ -53,9 +53,8 @@ class EventController extends AbstractController
             return $this->redirectToRoute('default_see_all_events');
         }
 
-        return $this->render('default/create-event.html.twig', [
-            'eventForm' => $form,
-        ]);
+        
+        return $this->render('default/create-event.html.twig', ['eventForm' => $form, ]);
 
     }
 
@@ -64,13 +63,21 @@ class EventController extends AbstractController
     {    
 
         $event = $entityManager->getRepository(Event::class)->find($id);
+        $user = $this->getUser();
 
         if (!$event) {
             $this->addFlash('Séance introuvable', "Cette séance n'existe pas");
             return $this->redirectToRoute('default_see_all_events');
         }
-
-        return $this->render('event/event-detail.html.twig', ['event' => $event]);
+        if (in_array("ROLE_ADMIN", $user->getRoles())) {
+            return $this->render('event/event-detail.html.twig', ['event' => $event, 'isAdmin' => true]);
+        }
+        else if (!in_array("ROLE_ADMIN", $user->getRoles())) {
+            return $this->render('event/event-detail.html.twig', ['event' => $event, 'isAdmin' => false]);
+        }
+        else {
+            return $this->render('event/event-detail.html.twig', ['event' => $event, 'isAdmin' => false]);
+        }
     }
 
     #[Route('/edit-event-{id}', name: 'event_edit_event', methods: ['GET', 'POST'])]
@@ -97,6 +104,23 @@ class EventController extends AbstractController
 
         return $this->render('event/edit-event.html.twig', ['event' => $event, 'eventForm' => $form]);
         
+    }
+
+    #[Route('/validate-event-{id}', name: 'event_validate_event', methods: ['GET', 'POST'])]
+    public function validateEvent(int $id, EntityManagerInterface $entityManager):Response
+    {    
+
+        $event = $entityManager->getRepository(Event::class)->find($id);
+
+        if (!$event) {
+            $this->addFlash('Séance introuvable', "Cette séance n'existe pas");
+            return $this->redirectToRoute('default_see_all_events');
+        }
+
+        $event->setEventIsValidated(true);
+        $entityManager->flush();    
+        $this->addFlash('Séance validée', "La séance a été validée avec succès");
+        return $this->redirectToRoute('default_admin');        
     }
 
     #[Route('/delete-event-{id}', name: 'event_delete_event', methods: ['GET'])]

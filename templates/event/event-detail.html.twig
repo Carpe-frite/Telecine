@@ -57,7 +57,12 @@
                     {% endif %}
 
                     {% if app.user.userId != event.getUser().userId %}
-                        {% if "ROLE_ADMIN" in app.user.getRoles() %}
+                        {% if isAdmin %}
+                            <div>
+                                <a href="{{path('event_validate_event', { 'id' : event.eventId}) }}">
+                                    <div class="bg-red-200 w-[210px] h-[50px]">Valider la séance</div>
+                                </a>
+                            </div>
                             <div>
                                 <a href="{{path('event_delete_event', { 'id' : event.eventId}) }}">
                                     <div class="bg-red-200 w-[210px] h-[50px]">Supprimer la séance</div>
@@ -88,6 +93,7 @@
                         {% endfor %}
                     {% endif %}     
                 {% endif %}     
+
                 </div>  
         </div>
     </main>
