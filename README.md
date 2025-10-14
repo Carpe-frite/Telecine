@@ -145,3 +145,67 @@ Ouvrez votre navigateur :
 http://localhost:8000
 ```
 
+🍎 Installation sous macOS
+
+L’installation est similaire à celle de Windows, mais adaptée à l’environnement Unix.
+
+###1. Cloner le dépôt
+```bash
+git clone https://github.com/tonpseudo/telecine.git
+cd telecine
+```
+
+###2. Installer les dépendances
+```bash
+composer install
+npm install
+```
+
+###3. Créer le fichier d’environnement
+```bash
+cp .env .env.local
+```
+
+Exemple de configuration :
+
+```bash
+DATABASE_URL="mysql://root:motdepasse@127.0.0.1:3306/telecine"
+TMDB_API_KEY="votre_cle_tmdb"
+APP_ENV=dev
+APP_DEBUG=true
+```
+
+###4. Créer la base de données
+```bash
+php bin/console doctrine:database:create
+php bin/console doctrine:migrations:migrate
+```
+
+Pour PostgreSQL :
+
+```bash
+DATABASE_URL="postgresql://postgres:motdepasse@127.0.0.1:5432/telecine"
+```
+
+###5. Compiler les assets
+```bash
+npm run dev
+```
+
+###6. Lancer le serveur
+
+Avec Symfony CLI :
+```bash
+symfony serve
+```
+
+Ou directement :
+```bash
+php -S localhost:8000 -t public
+```
+
+Puis ouvrez :
+```bash
+http://localhost:8000
+```
+
