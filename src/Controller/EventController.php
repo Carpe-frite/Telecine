@@ -22,8 +22,6 @@ class EventController extends AbstractController
     {
         $event = new Event();
                     
-        //$event->setEventName('Nom de votre évènement');
-
         $form = $this->createForm(EventFormType::class, $event);
 
         $form->handleRequest($request);
@@ -31,14 +29,7 @@ class EventController extends AbstractController
             $event= $form->getData();
             $user = $this->getUser();
             $event->setUser($user);
-
-            if (in_array("ROLE_ADMIN", $user->getRoles())) {
-                $event->setEventIsValidated(true);
-            }
-            else {
-                $event->setEventIsValidated(false);
-            }
-
+            $event->setIfAutoValidated($user);
             $entityManager->persist($event);
             $entityManager->flush();    
 
@@ -65,20 +56,46 @@ class EventController extends AbstractController
         $event = $entityManager->getRepository(Event::class)->find($id);
         $user = $this->getUser();
 
+        $participates = false;
+
         if (!$event) {
             $this->addFlash('Séance introuvable', "Cette séance n'existe pas");
             return $this->redirectToRoute('default_see_all_events');
         }
-        if (in_array("ROLE_ADMIN", $user->getRoles())) {
-            return $this->render('event/event-detail.html.twig', ['event' => $event, 'isAdmin' => true]);
-        }
-        else if (!in_array("ROLE_ADMIN", $user->getRoles())) {
-            return $this->render('event/event-detail.html.twig', ['event' => $event, 'isAdmin' => false]);
+
+        if ($user) {
+            if (!$event) {
+                $this->addFlash('Séance introuvable', "Cette séance n'existe pas");
+                return $this->redirectToRoute('default_see_all_events');
+            }
+
+            foreach ($event->getParticipants() as $participant) {
+                if($user == $participant->getUser()) {
+                    $participates = true;
+                }
+            }
+
+            if (in_array("ROLE_ADMIN", $user->getRoles())) { //à déplacer dans le modèle
+                if ($user== $event->getUser()) {
+                    return $this->render('event/event-detail.html.twig', ['event' => $event, 'isAdmin' => true, 'isHost' => true, 'isParticipant' => $participates]);
+                }
+                else {
+                    return $this->render('event/event-detail.html.twig', ['event' => $event, 'isAdmin' => true, 'isHost' => false, 'isParticipant' => $participates]);
+                }
+            }
+            else {
+                if ($user== $event->getUser()) {
+                    return $this->render('event/event-detail.html.twig', ['event' => $event, 'isAdmin' => false, 'isHost' => true, 'isParticipant' => $participates]);
+                }
+                else {
+                    return $this->render('event/event-detail.html.twig', ['event' => $event, 'isAdmin' => false, 'isHost' => false, 'isParticipant' => $participates]);
+                }
+            }
         }
         else {
-            return $this->render('event/event-detail.html.twig', ['event' => $event, 'isAdmin' => false]);
+            return $this->render('event/event-detail.html.twig', ['event' => $event, 'isAdmin' => false, 'isHost' => false, 'isParticipant' => $participates]);           
         }
-    }
+    }                              
 
     #[Route('/edit-event-{id}', name: 'event_edit_event', methods: ['GET', 'POST'])]
     public function editEvent(Request $request, int $id, EntityManagerInterface $entityManager):Response
@@ -127,13 +144,14 @@ class EventController extends AbstractController
     public function deleteEvent(int $id, EntityManagerInterface $entityManager):Response
     {    
         $event = $entityManager->getRepository(Event::class)->find($id);
+        $user = $this->getUser();
 
         if (!$event) {
             $this->addFlash('Séance introuvable', "Cette séance n'existe pas");
             return $this->redirectToRoute('default_see_all_events');
         }
         else {
-            if ($this->getUser() == $event->getUser() || $this->isGranted('ROLE_ADMIN')) { //On s'assure que seul l'utiisateur (ou un admin) ayant créé l'event puisse le supprimer
+            if ($event->checkIfCanDelete($user)) { //On s'assure que seul l'utiisateur (ou un admin) ayant créé l'event puisse le supprimer
                 $entityManager->remove($event);
                 $entityManager->flush();
                 return $this->redirectToRoute('default_see_all_events');
@@ -145,7 +163,7 @@ class EventController extends AbstractController
     }
 
     #[Route('/take-part-in-event-{id}/{confirm}', name: 'event_take_part_in_event', methods: ['GET', 'POST'])]
-    public function takePartInEvent(int $id, bool $confirm, EntityManagerInterface $entityManager):Response
+    public function takePartInEvent(int $id, string $confirm, EntityManagerInterface $entityManager):Response
     {    
         $user = $this->getUser();
         $event = $entityManager->getRepository(Event::class)->find($id);
@@ -153,7 +171,7 @@ class EventController extends AbstractController
         $eventParticipation = new TakePartIn();
         $eventParticipation->setUser($user);
         $eventParticipation->setEvent($event);
-        $eventParticipation->setUserHasConfirmed($confirm.(boolval("true") ? 'true' : 'false'));
+        $eventParticipation->setUserHasConfirmed($confirm === 'true');
 
         $entityManager->persist($eventParticipation);
         $entityManager->flush($eventParticipation);

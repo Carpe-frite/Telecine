@@ -1,23 +1,23 @@
 {% extends "base.html.twig"  %}
 
 {% block main %}
-    <main class="flex w-full h-14/20 justify-center mt-12">
+    <main class="flex w-full h-14/20 justify-center mt-6 sm:mt-12 mb-24">
 
-        <div id="core-view" class="relative w-full max-w-[1000px] flex flex-row justify-between">
+        <div id="core-view" class="relative w-full max-w-[1000px] flex flex-col sm:flex-row justify-between">
             <div id="column-1" class="relative flex flex-col gap-y-4">
-                <div id="telecine-intro" class="w-[490px] h-[425px] bg-neutral-300">
+                <div id="telecine-intro" class="hidden sm:block w-[490px] h-[425px] bg-secondary border-double border-4">
                     <div id="telecine-intro-image" class="relative h-[260px] bg-neutral-300">
-                        <img class="relative w-full h-full" src="{{ asset('images/telecine_logo.png') }}" alt="Logo Téléciné">
+                        <img class="relative w-full h-full" src="{{ asset('images/telecine_home_picture.webp') }}" alt="Logo Téléciné">
                     </div>
-                    <div>
+                    <div class="p-1">
                         <h1>Lorem Ipsum Dolores</h1>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in varius odio. Nulla pretium metus nec est euismod aliquam. Integer nec ex egestas, convallis diam eu, tempus felis. Mauris maximus libero nec quam suscipit ultrices a sit amet diam. Phasellus faucibus massa nulla, mattis auctor orci scelerisque quis.</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in varius odio. Nulla pretium metus nec est euismod aliquam. Integer nec ex egestas, convallis diam eu, tempus felis. Mauris maximus libero nec quam suscipit ultrices a sit amet diam.</p>
                     </div>
                 </div>
 
-                <div id="quick-login" class="w-[490px] h-[205px] bg-neutral-300">
+                <div id="quick-login" class="w-[295px] h-[350px] sm:w-[490px] sm:h-[205px] bg-neutral-300 p-1 bg-primary text-text-night border-double border-4">
                     <h1>En salle !</h1>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in varius odio. Nulla pretium metus nec est euismod aliquam. Integer nec ex egestas, convallis diam eu, tempus felis. Mauris maximus libero nec quam suscipit ultrices a sit amet diam.</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in varius odio. Nulla pretium metus nec est euismod aliquam. </p>
                 </div>            
             </div>
 

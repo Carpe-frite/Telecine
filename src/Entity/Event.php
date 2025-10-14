@@ -54,6 +54,9 @@ class Event
     #[ORM\Column]
     private ?bool $event_is_validated = null;
 
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTime $event_movie_year = null;
+
     public function __construct()
     {
         $this->reviewForms = new ArrayCollection();
@@ -214,5 +217,45 @@ class Event
         $this->event_is_validated = $event_is_validated;
 
         return $this;
+    }
+
+    public function getEventMovieYear(): ?\DateTime
+    {
+        return $this->event_movie_year;
+    }
+
+    public function getStrEventMovieYear(): ?String
+    {
+        $str_event_movie_year = $this->event_movie_year->format('Y');
+        return $str_event_movie_year;
+    }
+
+    public function setEventMovieYear(?\DateTime $event_movie_year): static
+    {
+        $this->event_movie_year = $event_movie_year;
+
+        return $this;
+    }
+
+    public function setIfAutoValidated(?User $user): void
+    {
+        if (in_array("ROLE_ADMIN", $user->getRoles())) {
+                $this->setEventIsValidated(true);
+            }
+            else {
+                $this->setEventIsValidated(false);
+            }
+    }
+
+    public function checkIfCanDelete(?User $user): bool
+    {
+        $can_delete = false;
+        if (in_array("ROLE_ADMIN", $user->getRoles())) {
+                $can_delete = true;
+        }
+        if ($user == $this->getUser()) {
+                $can_delete = true;
+        }
+        return $can_delete;
     }
 }

@@ -9,3 +9,4 @@ import './bootstrap.js';
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
 import './controllers/movie_fetch_data.js';
+import './controllers/burger_menu.js';

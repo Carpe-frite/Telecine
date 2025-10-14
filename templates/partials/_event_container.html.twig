@@ -1,26 +1,28 @@
-<div id="event" class="flex w-[490px] h-[205px] bg-neutral-300">
+<div id="event" class=" w-[350px] h-[302px] flex sm:w-[490px] sm:h-[205px] border-4 border-double shadow-2xl">
     <a href="/show-event-{{ event.eventId }}" class="flex w-full h-full">
-        <img class="flex  w-32 h-full max-w-[206px]" src="{{ asset('images/placeholder_poster.webp') }}" alt="Poster de la séance">
-        <div class="flex flex-col p-4 flex-1">
-            <div>
-                <h1> {{ event.eventName }} | {{ event.eventDate|date("d/m/Y") }} </h1>
+        <img class="flex w-[350px] h-[100px]  sm:w-32 sm:h-full sm:max-w-[206px] border-double border-r-4" src="{{ asset('images/placeholder_poster.webp') }}" alt="Poster de la séance">
+        <div class="flex flex-col flex-1">
+            <div class="bg-secondary border-double border-b-4">
+                <h4> {{ event.eventName }} | {{ event.eventDate|date("d/m/Y") }} </h4>
                 <p>Science-fiction, Aventure</p>
             </div>
-            <p> Proposé par : <b>{{ event.user.userName }}</b> </p>
-            <p class="line-clamp-3"> {{ event.eventDetail }}</p>
-            <ul class="flex space-x-2 mt-2">
-                {% for participation in event.participants %}
-                    <li class="w-6">
-                        <img src="{{ asset('icons/user_icon.png') }}" alt="Icone utilisateur"></i>
-                    </li>
-                {% endfor %}
+            <div class="bg-primary h-full">
+                <p> Proposé par : <b>{{ event.user.userName }}</b> </p>
+                <p class="line-clamp-3"> {{ event.eventDetail }}</p>
+                <ul class="flex space-x-2 mt-2">
+                    {% for participation in event.participants %}
+                        <li class="w-6">
+                            <img src="{{ asset('icons/user_icon.png') }}" alt="Icone utilisateur"></i>
+                        </li>
+                    {% endfor %}
 
-                {% if event.participants|length < event. eventMaxParticipants %}
-                    <li class="w-6">
-                        <img src="{{ asset('icons/add_user_icon.png') }}" alt="Icone utilisateur"></i>
-                    </li>
-                {% endif %}
-            </ul>
+                    {% if event.participants|length < event. eventMaxParticipants %}
+                        <li class="w-6">
+                            <img src="{{ asset('icons/add_user_icon.png') }}" alt="Icone utilisateur"></i>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
     </a>
 </div>

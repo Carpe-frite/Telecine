@@ -20,6 +20,7 @@ class EventFormType extends AbstractType
             ->add('event_end')
             ->add('event_detail')
             ->add('event_max_participants')
+            ->add('event_movie_year')
         ;
     }
 

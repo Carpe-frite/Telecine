@@ -1,2 +1,55 @@
 @import "tailwindcss";
 @source not "../../public";
+@import url('https://fonts.googleapis.com/css?family=Goudy%20Std:700|Inter:400');
+@import url('https://fonts.googleapis.com/css2?family=Neuton:wght@700&display=swap');
+
+@theme {
+  --color-text: rgb(38, 70, 83);
+  --color-text-night: rgb(233, 196, 106);
+  --color-background: rgb(244, 162, 97);
+  --color-primary: rgb(38, 70, 83);
+  --color-secondary: rgb(233, 196, 106);
+  --color-accent: rgb(231, 111, 81);
+
+  --font-button: "Neuton", serif;
+
+  --text-sm:1rem;
+}
+
+body {
+  font-family: 'Inter';
+  font-weight: 400;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: 'Goudy Std';
+  font-weight: 700;
+}
+
+html {font-size: 100%;} /* 16px */
+
+h1 {font-size: 2.489rem; /* 39.84px */}
+
+@media (max-width: 640px) {
+h1 { font-size: 1.25rem; }
+}
+
+h2 {font-size: 2.074rem; /* 33.12px */}
+
+@media (max-width: 640px) {
+h2 { font-size: 1rem; }
+}
+
+h3 {font-size: 1.728rem; /* 27.68px */}
+@media (max-width: 640px) {
+h3 { font-size: 0.9rem; }
+}
+
+h4 {font-size: 1.440rem; /* 23.04px */}
+@media (max-width: 640px) {
+h4 { font-size: 0.7rem; }
+}
+
+h5 {font-size: 1.200rem; /* 19.2px */}
+
+small {font-size: 1rem; /* 13.28px */}
