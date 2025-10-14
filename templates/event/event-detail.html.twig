@@ -21,12 +21,12 @@
                         <hr>
                         <h4 class="inline">Séance proposée par</h4> <h4 class="inline text-secondary">{{ event.getUser().userName }}</h4>    
                         <ul class="flex space-x-4 mt-2">
-                            {% for participation in event.participants %}
-                                <li class="relative w-7 sm:w-14 group">
-                                    {% if participation.getUser().userId == event.getUser().userId %}
-                                            <img src="{{ asset('icons/user_host_icon.png') }}" alt="Icone utilisateur"></i>
-                                            <div class="absolute mt-2 border-double border-4 shadow-xl rounded-lg flex bg-secondary justify-center w-full opacity-0 group-hover:opacity-100 duration-700 ease-in-out">{{ participation.getUser().userName }}</div>
-                                    {% elseif participation.getUser().userId != event.getUser().userId %}
+                            <li class="relative w-7 sm:w-14 group">
+                                {% if isHost %}
+                                    <img src="{{ asset('icons/user_host_icon.png') }}" alt="Icone utilisateur"></i>
+                                    <div class="absolute mt-2 border-double border-4 shadow-xl rounded-lg flex bg-secondary justify-center w-full opacity-0 group-hover:opacity-100 duration-700 ease-in-out">{{ participation.getUser().userName }}</div>
+                                {% elseif isParticipant %}
+                                {% for participation in event.participants %}
                                         {% if participation.userHasConfirmed== true %}
                                             <img src="{{ asset('icons/user_icon.png') }}" alt="Icone utilisateur"></i>
                                             <div class="absolute mt-2 border-double border-4 shadow-xl rounded-lg flex bg-secondary justify-center w-full opacity-0 group-hover:opacity-100 duration-700 ease-in-out">{{ participation.getUser().userName }}</div>
@@ -34,9 +34,9 @@
                                             <img src="{{ asset('icons/user_not_confirmed_icon.png') }}" alt="Icone utilisateur"></i>
                                             <div class="absolute mt-2 border-double border-4 shadow-xl rounded-lg flex bg-secondary justify-center w-full opacity-0 group-hover:opacity-100 duration-700 ease-in-out">{{ participation.getUser().userName }}</div>
                                         {% endif %}
-                                    {% endif %}
-                                </li>
-                            {% endfor %}
+                                    {% endfor %}
+                                {% endif %}
+                            </li>
                         </ul>
                     </div>                
             </div>
@@ -54,9 +54,8 @@
                             <div class="bg-secondary w-[150px] h-[30px] sm:w-[210px] sm:h-[50px] flex items-center justify-center border-4 border-double font-button">Modifier la séance</div>
                         </a>
                     </div>
-                {% endif %}
 
-                {% if isAdmin and isHost %}
+                {% elseif isAdmin and isHost %}
                     <div>
                         <a href="{{path('event_delete_event', { 'id' : event.eventId}) }}">
                             <div class="bg-secondary w-[150px] h-[30px] sm:w-[210px] sm:h-[50px] flex items-center justify-center border-4 border-double font-button">Supprimer la séance</div>
@@ -67,9 +66,8 @@
                             <div class="bg-secondary w-[150px] h-[30px] sm:w-[210px] sm:h-[50px] flex items-center justify-center border-4 border-double font-button">Modifier la séance</div>
                         </a>
                     </div>
-                {% endif %}
 
-                {% if isAdmin and not isHost %}
+                {% elseif isAdmin and not isHost %}
                     {% if event.eventIsValidated == false %}
                      <div>
                             <a href="{{path('event_validate_event', { 'id' : event.eventId}) }}">

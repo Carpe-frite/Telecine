@@ -64,7 +64,7 @@ class EventController extends AbstractController
 
         if ($user){
             $isParticipantofEvent = $event->getIfParticipantOfEvent($user);
-            $isHostofEvent = $event->getIfHostOfEvent($user);
+            //$isParticipantConfirmed = $event->getIfParticipantConfirmed($user); Pour repasser la logique contenue dans event-detail.htmltwig            $isHostofEvent = $event->getIfHostOfEvent($user);
             $isAdmin = $user->getIfAdmin();
         }
 
