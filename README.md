@@ -117,13 +117,13 @@ APP_ENV=dev
 APP_DEBUG=true
 ```
 
-###6. Créer la base de données
+### 6. Créer la base de données
 ```bash
 php bin/console doctrine:database:create
 php bin/console doctrine:migrations:migrate
 ```
 
-###7. Lancer le serveur Symfony
+### 7. Lancer le serveur Symfony
 
 Si vous avez installé Symfony CLI :
 
@@ -149,19 +149,19 @@ http://localhost:8000
 
 L’installation est similaire à celle de Windows, mais adaptée à l’environnement Unix.
 
-###1. Cloner le dépôt
+### 1. Cloner le dépôt
 ```bash
 git clone https://github.com/tonpseudo/telecine.git
 cd telecine
 ```
 
-###2. Installer les dépendances
+### 2. Installer les dépendances
 ```bash
 composer install
 npm install
 ```
 
-###3. Créer le fichier d’environnement
+### 3. Créer le fichier d’environnement
 ```bash
 cp .env .env.local
 ```
@@ -175,7 +175,7 @@ APP_ENV=dev
 APP_DEBUG=true
 ```
 
-###4. Créer la base de données
+### 4. Créer la base de données
 ```bash
 php bin/console doctrine:database:create
 php bin/console doctrine:migrations:migrate
@@ -187,12 +187,12 @@ Pour PostgreSQL :
 DATABASE_URL="postgresql://postgres:motdepasse@127.0.0.1:5432/telecine"
 ```
 
-###5. Compiler les assets
+### 5. Compiler les assets
 ```bash
 npm run dev
 ```
 
-###6. Lancer le serveur
+### 6. Lancer le serveur
 
 Avec Symfony CLI :
 ```bash
