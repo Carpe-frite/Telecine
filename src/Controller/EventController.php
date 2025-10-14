@@ -4,13 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Entity\TakePartIn;
-use App\Entity\User;
 use App\Form\EventFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -54,47 +50,25 @@ class EventController extends AbstractController
     {    
 
         $event = $entityManager->getRepository(Event::class)->find($id);
+        /** @var \App\Entity\User|null $user */
         $user = $this->getUser();
 
-        $participates = false;
+        $isParticipantofEvent = false;
+        $isHostofEvent = false;
+        $isAdmin = false;
 
         if (!$event) {
             $this->addFlash('Séance introuvable', "Cette séance n'existe pas");
             return $this->redirectToRoute('default_see_all_events');
         }
 
-        if ($user) {
-            if (!$event) {
-                $this->addFlash('Séance introuvable', "Cette séance n'existe pas");
-                return $this->redirectToRoute('default_see_all_events');
-            }
-
-            foreach ($event->getParticipants() as $participant) {
-                if($user == $participant->getUser()) {
-                    $participates = true;
-                }
-            }
-
-            if (in_array("ROLE_ADMIN", $user->getRoles())) { //à déplacer dans le modèle
-                if ($user== $event->getUser()) {
-                    return $this->render('event/event-detail.html.twig', ['event' => $event, 'isAdmin' => true, 'isHost' => true, 'isParticipant' => $participates]);
-                }
-                else {
-                    return $this->render('event/event-detail.html.twig', ['event' => $event, 'isAdmin' => true, 'isHost' => false, 'isParticipant' => $participates]);
-                }
-            }
-            else {
-                if ($user== $event->getUser()) {
-                    return $this->render('event/event-detail.html.twig', ['event' => $event, 'isAdmin' => false, 'isHost' => true, 'isParticipant' => $participates]);
-                }
-                else {
-                    return $this->render('event/event-detail.html.twig', ['event' => $event, 'isAdmin' => false, 'isHost' => false, 'isParticipant' => $participates]);
-                }
-            }
+        if ($user){
+            $isParticipantofEvent = $event->getIfParticipantOfEvent($user);
+            $isHostofEvent = $event->getIfHostOfEvent($user);
+            $isAdmin = $user->getIfAdmin();
         }
-        else {
-            return $this->render('event/event-detail.html.twig', ['event' => $event, 'isAdmin' => false, 'isHost' => false, 'isParticipant' => $participates]);           
-        }
+
+        return $this->render('event/event-detail.html.twig', ['event' => $event, 'isAdmin' => $isAdmin, 'isHost' => $isHostofEvent, 'isParticipant' => $isParticipantofEvent]);
     }                              
 
     #[Route('/edit-event-{id}', name: 'event_edit_event', methods: ['GET', 'POST'])]

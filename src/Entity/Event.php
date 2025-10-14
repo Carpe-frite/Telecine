@@ -258,4 +258,24 @@ class Event
         }
         return $can_delete;
     }
+
+    public function getIfHostOfEvent(?User $user): bool
+    {
+        $user_is_host = false;
+        if ($user== $this->getUser()) {
+            $user_is_host=true;
+        }
+        return $user_is_host;
+    }
+
+    public function getIfParticipantOfEvent(?User $user): bool
+    {
+        $user_is_participant = false;
+        foreach ($this->getParticipants() as $participant) {
+            if($user == $participant->getUser()) {
+                $user_is_participant = true;
+            }
+        }
+        return $user_is_participant;
+    }
 }
