@@ -145,7 +145,7 @@ class EventController extends AbstractController
         $eventParticipation->setUserHasConfirmed($confirm === 'true');
 
         $entityManager->persist($eventParticipation);
-        $entityManager->flush($eventParticipation);
+        $entityManager->flush();
 
         return $this->redirectToRoute('event_show_event', ['id' => $id]);
 
