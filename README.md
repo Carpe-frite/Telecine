@@ -72,7 +72,76 @@ Elles servent notamment à configurer la connexion à la base de données et la 
 ## 🪟 Installation sous Windows
 
 ### 1. Cloner le dépôt
-Ouvre **Git Bash** ou **PowerShell** :
+Ouvrez **Git Bash** ou **PowerShell** :
 ```bash
 git clone https://github.com/tonpseudo/telecine.git
 cd telecine
+```
+
+### 2. Installer les dépendances PHP
+```bash
+composer install
+```
+
+### 3. Installer les dépendances front-end
+```bash
+npm install
+```
+
+### 3. Installer les dépendances front-end
+Pour lancer la compilation de Tailwind CSS :
+```bash
+npm run dev
+```
+
+### 4. Compiler les assets
+Pour lancer la compilation de Tailwind CSS :
+```bash
+npm run dev
+```
+
+### 5. Configurer l’environnement
+
+Copiez le fichier .env :
+
+```bash
+cp .env .env.local
+```
+
+Puis éditez .env.local avec vos paramètres :
+
+```bash
+DATABASE_URL="mysql://root:@127.0.0.1:3306/telecine"
+TMDB_API_KEY="ta_cle_tmdb"
+APP_ENV=dev
+APP_DEBUG=true
+```
+
+###6. Créer la base de données
+```bash
+php bin/console doctrine:database:create
+php bin/console doctrine:migrations:migrate
+```
+
+###7. Lancer le serveur Symfony
+
+Si vous avez installé Symfony CLI :
+
+```bash
+symfony serve
+```
+
+Sinon :
+
+```bash
+php -S localhost:8000 -t public
+```
+
+###8. Accédez à l’application
+
+Ouvrez votre navigateur :
+
+```bash
+http://localhost:8000
+```
+
