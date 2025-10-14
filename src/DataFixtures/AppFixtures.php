@@ -4,7 +4,6 @@ namespace App\DataFixtures;
 
 use App\Entity\User;
 use App\Entity\Event;
-use App\Enum\User_Role;
 use App\Enum\User_Status;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -32,6 +31,7 @@ class AppFixtures extends Fixture
             $event->setEventMovieYear(new \DateTime('2003-06-05'));
             $event->setEventStart(new \DateTime('2025-06-05 12:15:00'));
             $event->setEventEnd(new \DateTime('2025-06-05 15:15:00'));
+            $event->setEventDetail('Le climatologue Jack Hall avait prédit l’arrivée d’un autre âge de glace, mais n’avait jamais pensé que cela se produirait de son vivant. Un changement climatique imprévu et violent à l’échelle mondiale entraîne à travers toute la planète de gigantesques ravages : inondations, grêle, tornades et températures d’une magnitude inédite. Jack a peu de temps pour convaincre le président des États-Unis d’évacuer le pays pour sauver des millions de personnes en danger, dont son fils Sam bloqué à New York par -70°C...');
             $event->setEventMaxParticipants(5);
             $event->setEventIsValidated(true);
             $event->setUser($user);
