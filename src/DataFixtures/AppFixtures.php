@@ -24,14 +24,14 @@ class AppFixtures extends Fixture
         $manager->persist($user);
 
 
-        // create 20 events! Bam!
         for ($i = 0; $i < 20; $i++) {
             $event= new Event();
             $event->setEventName('Séance '.$i);
             $event->setEventDate(new \DateTime('2011-06-05 12:15:00'));
             $event->setEventMovie('The Day After Tomorrow');
-            $event->setEventStart(new \DateTime('2011-06-05 12:15:00'));
-            $event->setEventEnd(new \DateTime('2011-06-05 15:15:00'));
+            $event->setEventMovieYear(new \DateTime('2003-06-05'));
+            $event->setEventStart(new \DateTime('2025-06-05 12:15:00'));
+            $event->setEventEnd(new \DateTime('2025-06-05 15:15:00'));
             $event->setEventMaxParticipants(5);
             $event->setEventIsValidated(true);
             $event->setUser($user);

@@ -36,7 +36,7 @@ document.addEventListener('turbo:load', () => {
     suggestions.querySelectorAll('li').forEach(li => {
       li.addEventListener('click', () => {
         input.value = li.dataset.title;
-        movie_year.value = li.dataset.release_date || 'N/A';
+        movie_year.value = li.dataset.release_date || '1900-01-01';
         suggestions.classList.add('hidden');
       });
     });
