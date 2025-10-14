@@ -35,14 +35,11 @@ class EventController extends AbstractController
             $eventParticipation->setUserHasConfirmed(true);
 
             $entityManager->persist($eventParticipation);
-            $entityManager->flush($eventParticipation);
+            $entityManager->flush();
 
             return $this->redirectToRoute('default_see_all_events');
-        }
-
-        
+        }        
         return $this->render('default/create-event.html.twig', ['eventForm' => $form, ]);
-
     }
 
     #[Route('/show-event-{id}', name: 'event_show_event', methods: ['GET'])]
@@ -64,7 +61,7 @@ class EventController extends AbstractController
 
         if ($user){
             $isParticipantofEvent = $event->getIfParticipantOfEvent($user);
-            //$isParticipantConfirmed = $event->getIfParticipantConfirmed($user); Pour repasser la logique contenue dans event-detail.htmltwig            $isHostofEvent = $event->getIfHostOfEvent($user);
+            $isHostofEvent = $event->getIfHostOfEvent($user);
             $isAdmin = $user->getIfAdmin();
         }
 
