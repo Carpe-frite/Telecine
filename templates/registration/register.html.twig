@@ -42,6 +42,8 @@
                         {{ form_errors(registrationForm.plainPassword.second) }}
                     </div>
 
+                    <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+
                     <button type="submit" class="bg-secondary w-[210px] h-[50px] flex items-center justify-center border-4 border-double self-center font-button">Créer mon compte</button>
 
                 {{ form_end(registrationForm) }}        
