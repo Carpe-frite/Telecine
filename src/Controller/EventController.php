@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Event;
 use App\Entity\TakePartIn;
 use App\Form\EventFormType;
+use App\Service\EventUserChecker;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -69,28 +70,34 @@ class EventController extends AbstractController
     }                              
 
     #[Route('/edit-event-{id}', name: 'event_edit_event', methods: ['GET', 'POST'])]
-    public function editEvent(Request $request, int $id, EntityManagerInterface $entityManager):Response
+    public function editEvent(Request $request, int $id, EntityManagerInterface $entityManager, EventUserChecker $eventUserChecker):Response
     {    
 
         $event = $entityManager->getRepository(Event::class)->find($id);
+        $user = $this->getUser();
 
         if (!$event) {
             $this->addFlash('Séance introuvable', "Cette séance n'existe pas");
             return $this->redirectToRoute('default_see_all_events');
-        }
-
-        $form = $this->createForm(EventFormType::class, $event);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $event= $form->getData();
-
-            $entityManager->flush();    
-            $this->addFlash('Séance modifiée', "La séance a été modifiée avec succès");
+        } 
+        if (!$eventUserChecker->checkIfEventCreatedByUser($user,$event)) {
+            $this->addFlash('Séance introuvable', "Cette séance n'existe pas");
             return $this->redirectToRoute('default_see_all_events');
         }
+        else {
+            $form = $this->createForm(EventFormType::class, $event);
+            $form->handleRequest($request);
 
-        return $this->render('event/edit-event.html.twig', ['event' => $event, 'eventForm' => $form]);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $event= $form->getData();
+
+                $entityManager->flush();    
+                $this->addFlash('Séance modifiée', "La séance a été modifiée avec succès");
+                return $this->redirectToRoute('default_see_all_events');
+            }
+
+            return $this->render('event/edit-event.html.twig', ['event' => $event, 'eventForm' => $form]);
+        }
         
     }
 
@@ -118,6 +125,10 @@ class EventController extends AbstractController
         $user = $this->getUser();
 
         if (!$event) {
+            $this->addFlash('Séance introuvable', "Cette séance n'existe pas");
+            return $this->redirectToRoute('default_see_all_events');
+        }
+        if ($user != $event->getUser()) {
             $this->addFlash('Séance introuvable', "Cette séance n'existe pas");
             return $this->redirectToRoute('default_see_all_events');
         }

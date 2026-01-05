@@ -6,12 +6,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\HttpFoundation\Request;
 
 class SecurityController extends AbstractController
 {
     #[Route(path: '/sign-in', name: 'security_sign_in')]
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    public function login(AuthenticationUtils $authenticationUtils, Request $request): Response
     {
+        /*$bannedIp = array("127.0.0.1");
+        $userIp = $request->getClientIp();
+
+        if (in_array($userIp, $bannedIp, true)) {
+            throw $this->createAccessDeniedException();
+        }*/
+
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
 
