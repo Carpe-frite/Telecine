@@ -64,8 +64,7 @@ jobs:
           MYSQL_DATABASE: db_telecine_test
           MYSQL_ROOT_PASSWORD: root
         ports:
-          - 3306:3308
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+          - 3306
 
     steps:
 
