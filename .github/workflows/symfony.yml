@@ -41,6 +41,7 @@ jobs:
 
   symfony-checking-dockerized-db:
     runs-on: ubuntu-latest
+    needs: symfony-checking-env-file-and-dependencies
 
     steps:
     - name: Building the container
@@ -54,6 +55,7 @@ jobs:
 
   symfony-unit-feature-tests:
     runs-on: ubuntu-latest
+    needs: symfony-checking-dockerized-db
 
     steps:
     - name: Execute tests (Unit and Feature tests) via PHPUnit
