@@ -38,9 +38,12 @@ jobs:
           ${{ runner.os }}-php-
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-    - name: Create Database
-      run: |
-        docker compose build
+    - name: Building the container
+      run: docker compose build
+    - name: Running the container
+      run: docker compose up -d
+    - name: Displaying volume and its data
+      run: docker compose volumes --format
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
         DATABASE_URL: sqlite:///%kernel.project_dir%/data/database.sqlite
