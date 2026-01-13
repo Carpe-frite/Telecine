@@ -73,11 +73,10 @@ jobs:
           ${{ runner.os }}-php-
     - name: Install Composer dependencies
       run: composer install --no-interaction --prefer-dist
-    - name: Execute tests (Unit and Feature tests) via PHPUnit
-      run: vendor/bin/console --env=test doctrine:database:create
-    - name: Execute tests (Unit and Feature tests) via PHPUnit
-      run: vendor/bin/console --env=test doctrine:schema:create
-    - name: Execute tests (Unit and Feature tests) via PHPUnit
-      run: vendor/bin/console --env=test doctrine:fixtures:load
+    - name: Prepare test database
+      run: |
+        php bin/console --env=test doctrine:database:create
+        php bin/console --env=test doctrine:schema:create
+        php bin/console --env=test doctrine:fixtures:load
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       run: vendor/bin/phpunit --colors --display-errors
