@@ -85,6 +85,6 @@ jobs:
     - name: Installing and building npm to display templates
       run: |
         npm install
-        npm build
+        npm run build
     - name: Executing tests (Unit and Feature tests) via PHPUnit
       run: vendor/bin/phpunit --colors --display-errors
