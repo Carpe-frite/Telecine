@@ -65,6 +65,13 @@ class DefaultController extends AbstractController
         
         return $this->render('partials/_filtered_event_view.html.twig', ['events' => $events]);
    }
+
+    #[Route('/user-profile', name: 'user_profile', methods: ['GET'])]
+    public function userProfile()
+    {
+        $user = $this->getUser();
+        return $this->render('default/user-profile.html.twig', ['user' => $user]);
+    }
 }
 
 

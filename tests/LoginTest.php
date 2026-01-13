@@ -17,9 +17,9 @@ class LoginTest extends WebTestCase
         $testUser = $userRepository->findUserByEmail('dscully@telecine.fr');
 
         $client->loginUser($testUser);
-        $client->request('GET', '/');
+        $client->request('GET', '/user-profile');
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Bienvenue sur Téléciné');
+        $this->assertSelectorTextContains('h1', 'Bienvenue Dana Scully');
     }
 }
