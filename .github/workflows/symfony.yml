@@ -59,7 +59,6 @@ jobs:
     needs: symfony-checking-dockerized-db
 
     steps:
-
     - uses: shivammathur/setup-php@2cb9b829437ee246e9b3cac53555a39208ca6d28
       with:
         php-version: '8.4'
@@ -72,7 +71,26 @@ jobs:
         key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
         restore-keys: |
           ${{ runner.os }}-php-
+    - name: Building the container
+      run: docker compose build
+    - name: Running the container
+      run: docker compose up -d
+    - name: Listing the volumes
+      run: docker volume ls
+    - name: Inspecting the volumes
+      run: docker volume inspect telecine_telecine-volume
+    - name: Wait for database to be ready
+      run: |
+        echo "Waiting for DB..."
+        for i in {1..30}; do
+          php -r "new PDO('mysql:host=127.0.0.1;port=3306;', 'root', 'root');" && break
+          echo "DB not ready yet, retrying..."
+          sleep 1
+        done
+    - name: Prepare test database
+      run: |
+        php bin/console --env=test doctrine:database:create
+        php bin/console --env=test doctrine:schema:create
+        php bin/console --env=test doctrine:fixtures:load
     - name: Execute tests (Unit and Feature tests) via PHPUnit
-      env:
-        DATABASE_URL: sqlite:///%kernel.project_dir%/data/database.sqlite
-      run: vendor/bin/phpunit
+      run: vendor/bin/phpunit --colors --display-errors
