@@ -46,7 +46,7 @@
         </ul>
     </nav>
 
-        <div class="relative ml-4 mr-24 w-[60px]">
+        <div id ="user-profile-button" class="relative ml-4 mr-24 w-[60px]">
         {% if app.user %}
             {# <h4 class="text-primary text-center"> Bienvenue {{ app.user.userIdentifier }}</h4>   #}
             <a href="/my-events"><img src="{{ asset('icons/user_icon_orange.png') }}" alt="Lien vers mon compte" class="w-[48px] mt-4"></a>
