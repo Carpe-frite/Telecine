@@ -1,4 +1,5 @@
 # 🎬 Téléciné
+[![Symfony](https://github.com/Carpe-frite/Telecine/actions/workflows/symfony.yml/badge.svg)](https://github.com/Carpe-frite/Telecine/actions/workflows/symfony.yml)
 
 **Téléciné** est une application web collaborative qui permet aux cinéphiles d’organiser et de rejoindre des **séances de films**.  
 Chaque séance est centrée autour d’un film choisi, d’une date et d’un nombre limité de participants.  
