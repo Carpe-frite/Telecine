@@ -59,7 +59,7 @@ jobs:
     needs: symfony-checking-dockerized-db
 
     services:
-      mysql:
+      mariadb:
         image: mariadb:latest
         env:
           MYSQL_DATABASE: db_telecine_test
@@ -83,8 +83,8 @@ jobs:
           ${{ runner.os }}-php-
     - name: Prepare test database
       run: |
-        php bin/console --env=test doctrine:database:create
-        php bin/console --env=test doctrine:schema:create
-        php bin/console --env=test doctrine:fixtures:load
+        bin/console --env=test doctrine:database:create
+        bin/console --env=test doctrine:schema:create
+        bin/console --env=test doctrine:fixtures:load
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       run: vendor/bin/phpunit --colors --display-errors
