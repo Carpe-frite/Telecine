@@ -60,6 +60,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - uses: actions/cache@v3
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
         DATABASE_URL: sqlite:///%kernel.project_dir%/data/database.sqlite
