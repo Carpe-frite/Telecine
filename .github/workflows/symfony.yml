@@ -52,7 +52,7 @@ jobs:
     - name: Listing the volumes
       run: docker volume ls
     - name: Inspecting the volumes
-      run: docker volume inspect telecine-volume
+      run: docker volume inspect telecine_telecine-volume
 
   symfony-unit-feature-tests:
     runs-on: ubuntu-latest
