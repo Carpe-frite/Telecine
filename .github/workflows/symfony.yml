@@ -71,6 +71,8 @@ jobs:
         key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
         restore-keys: |
           ${{ runner.os }}-php-
+    - name: Install Composer dependencies
+      run: composer install --no-interaction --prefer-dist
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       run: vendor/bin/console --env=test doctrine:database:create
     - name: Execute tests (Unit and Feature tests) via PHPUnit
