@@ -77,14 +77,14 @@ jobs:
         docker compose up -d
     - name: Short lapse of time to get the db ready
       run: sleep 10
-    - name: Prepare test database
+    - name: Preparing the test database
       run: |
         php bin/console --env=test doctrine:database:create
         php bin/console --env=test doctrine:schema:create
         php bin/console --env=test doctrine:fixtures:load --no-interaction
-    - name: Install and run npm to display templates
+    - name: Installing and building npm to display templates
       run: |
         npm install
-        npm run
-    - name: Execute tests (Unit and Feature tests) via PHPUnit
+        npm build
+    - name: Executing tests (Unit and Feature tests) via PHPUnit
       run: vendor/bin/phpunit --colors --display-errors
