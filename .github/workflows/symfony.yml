@@ -82,7 +82,7 @@ jobs:
           ${{ runner.os }}-php-
     - name: Migrating data into DB
       env:
-        DATABASE_URL: mysql://root:root@mysql:3307/db_telecine_test?serverVersion=mariadb-10.11
+        DATABASE_URL: mysql://root:root@mysql:3307/db_telecine_test?serverVersion=11.8.2-MariaDB&charset=utf8mb4
       run: php bin/console doctrine:migrations:migrate
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       run: vendor/bin/phpunit --colors --display-errors
