@@ -44,6 +44,7 @@ jobs:
     needs: symfony-checking-env-file-and-dependencies
 
     steps:
+    - uses: actions/checkout@v4
     - name: Building the container
       run: docker compose build
     - name: Running the container
@@ -58,6 +59,7 @@ jobs:
     needs: symfony-checking-dockerized-db
 
     steps:
+    - uses: actions/checkout@v4
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
         DATABASE_URL: sqlite:///%kernel.project_dir%/data/database.sqlite
