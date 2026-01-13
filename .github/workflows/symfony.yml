@@ -15,7 +15,7 @@ permissions:
   contents: read
 
 jobs:
-  symfony-tests:
+  symfony-checking-env-file-and-dependencies:
     runs-on: ubuntu-latest
     
     steps:
@@ -38,12 +38,24 @@ jobs:
           ${{ runner.os }}-php-
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+  symfony-checking-dockerized-db:
+    runs-on: ubuntu-latest
+
+    steps:
     - name: Building the container
       run: docker compose build
     - name: Running the container
       run: docker compose up -d
     - name: Listing the volumes
       run: docker volume ls
+    - name: Inspecting the volumes
+      run: docker volume inspect telecine-volume
+
+  symfony-unit-feature-tests:
+    runs-on: ubuntu-latest
+
+    steps:
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
         DATABASE_URL: sqlite:///%kernel.project_dir%/data/database.sqlite
