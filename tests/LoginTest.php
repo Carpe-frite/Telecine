@@ -2,7 +2,6 @@
 
 namespace App\Tests;
 
-use App\Entity\User;
 use App\Repository\UserRepository;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -17,7 +16,7 @@ class LoginTest extends WebTestCase
         $testUser = $userRepository->findUserByEmail('dscully@telecine.fr');
 
         $client->loginUser($testUser);
-        $client->request('GET', '/user-profile');
+        $client->request('GET', '/user-profile'); /* Si l'utilisateur est connecté, alors il peut accéder à cette page */
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Bienvenue Dana Scully');

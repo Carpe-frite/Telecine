@@ -53,6 +53,12 @@ public function findEventsITakePartIn(User $user)
         return $dql->getResult();
     }
 
+    public function findOneEventByGenre($selected_genre): Event {
+        $entityManager = $this->getEntityManager();
+        $dql = $entityManager->createQuery('SELECT e FROM App\Entity\Event e WHERE e.event_movie_genre = :selected_genre')->setParameter('selected_genre', $selected_genre)->setMaxResults(1);
+        return $dql->getOneorNullResult();
+    }
+
 //    /**
 //     * @return Event[] Returns an array of Event objects
 //     */
