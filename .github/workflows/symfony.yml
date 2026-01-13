@@ -42,8 +42,8 @@ jobs:
       run: docker compose build
     - name: Running the container
       run: docker compose up -d
-    - name: Displaying volume and its data
-      run: docker compose volumes telecine2_telecine-volume --format
+    - name: Inspecting the volume and its data
+      run: docker volume inspect telecine-volume
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
         DATABASE_URL: sqlite:///%kernel.project_dir%/data/database.sqlite
