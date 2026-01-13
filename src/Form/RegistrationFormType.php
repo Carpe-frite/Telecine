@@ -18,8 +18,18 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('user_name')
-            ->add('user_email')
+            ->add('user_name', null, [
+                'required' => true,
+                'attr' => [
+                    'placeholder' => 'Votre identifiant',
+                ],
+            ])
+            ->add('user_email', null, [
+                'required' => true,
+                'attr' => [
+                    'placeholder' => 'Votre e-mail',
+                  ]
+                ])
             ->add('user_dob')
             ->add('user_country', EnumType::class,['class' => Country::class, 'choice_label' => fn($choice) => $choice->value])
             ->add('plainPassword', RepeatedType::class, [

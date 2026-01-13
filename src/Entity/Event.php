@@ -57,6 +57,15 @@ class Event
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $event_movie_year = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $event_movie_picture = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $event_movie_genre = null;
+
+    #[ORM\Column]
+    private ?bool $event_is_archived = null;
+
     public function __construct()
     {
         $this->reviewForms = new ArrayCollection();
@@ -277,5 +286,42 @@ class Event
             }
         }
         return $user_is_participant;
+    }
+
+    public function getEventMoviePicture(): ?string
+    {
+        return $this->event_movie_picture;
+    }
+
+    public function setEventMoviePicture(string $event_movie_picture): static
+    {
+        $this->event_movie_picture = $event_movie_picture;
+
+        return $this;
+    }
+
+    public function getEventMovieGenre(): ?string
+    {
+        return $this->event_movie_genre;
+    }
+
+    public function setEventMovieGenre(?string $event_movie_genre): static
+    {
+        $this->event_movie_genre = $event_movie_genre;
+
+        return $this;
+    }
+
+    public function isEventIsArchived(): ?bool
+    {
+        return $this->event_is_archived;
+    }
+
+    public function setEventIsArchived(bool $event_is_archived): static
+    {
+        $this->event_is_archived = $event_is_archived;
+        
+
+        return $this;
     }
 }

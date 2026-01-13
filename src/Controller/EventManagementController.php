@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class EventController extends AbstractController
+class EventManagementController extends AbstractController
 {
     #[Route('/create-event', name: 'event_create_event', methods: ['GET','POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -38,6 +38,7 @@ class EventController extends AbstractController
             $entityManager->persist($eventParticipation);
             $entityManager->flush();
 
+            $this->addFlash('event-created', "Votre séance ". $event->getEventName()." a été créée avec succès");
             return $this->redirectToRoute('default_see_all_events');
         }        
         return $this->render('default/create-event.html.twig', ['eventForm' => $form, ]);

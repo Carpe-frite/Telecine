@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @source not "../../public";
-@import url('https://fonts.googleapis.com/css?family=Goudy%20Std:700|Inter:400');
+@import url('https://fonts.googleapis.com/css2?family=Goudy+Bookletter+1911&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Neuton:wght@700&display=swap');
 
 @theme {
@@ -8,8 +8,9 @@
   --color-text-night: rgb(233, 196, 106);
   --color-background: rgb(244, 162, 97);
   --color-primary: rgb(38, 70, 83);
-  --color-secondary: rgb(233, 196, 106);
+  --color-secondary: rgb(234, 186, 67);
   --color-accent: rgb(231, 111, 81);
+  --color-secondary-accent: rgb(42, 157, 143);
 
   --font-button: "Neuton", serif;
 
@@ -22,19 +23,18 @@ body {
 }
 
 h1, h2, h3, h4, h5 {
-  font-family: 'Goudy Std';
-  font-weight: 700;
+  font-family: 'Goudy Bookletter 1911';
+  font-weight: 400;
 }
 
 html {font-size: 100%;} /* 16px */
 
-h1 {font-size: 2.489rem; /* 39.84px */}
+h1, h2 {font-size: 2.489rem; /* 39.84px */}
 
 @media (max-width: 640px) {
 h1 { font-size: 1.25rem; }
 }
 
-h2 {font-size: 2.074rem; /* 33.12px */}
 
 @media (max-width: 640px) {
 h2 { font-size: 1rem; }

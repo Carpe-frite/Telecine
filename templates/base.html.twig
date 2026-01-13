@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
     <head>
         <meta charset="UTF-8">
+        <meta name="turbo-cache-control" content="no-cache">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{% block title %}Téléciné{% endblock %}</title>
         {% block stylesheets %}
@@ -12,11 +13,15 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
-    <body class="w-full h-full min-h-screen bg-linear-to-bl from-accent to-secondary">
-
+    <body class="w-full h-full min-h-screen bg-gradient-to-br from-orange-200 to-sky-200">
+        {% for message in app.flashes('event-created') %}
+            <div class="absolute bg-secondary-accent border-t-4 border-teal-500 text-teal-900 px-4 py-3 shadow-md bottom-0" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
         {% include 'partials/_header.html.twig'  %}
 
-        {% block main %}{% endblock %}
+        {% block main %}   {% endblock %}
 
         {% include 'partials/_footer.html.twig'  %}
     </body>

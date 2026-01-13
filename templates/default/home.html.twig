@@ -5,26 +5,32 @@
 
         <div id="core-view" class="relative w-full max-w-[1000px] flex flex-col sm:flex-row justify-between">
             <div id="column-1" class="relative flex flex-col gap-y-4">
-                <div id="telecine-intro" class="hidden sm:block w-[490px] h-[425px] bg-secondary border-double border-4">
-                    <div id="telecine-intro-image" class="relative h-[260px] bg-neutral-300">
-                        <img class="relative w-full h-full" src="{{ asset('images/telecine_home_picture.webp') }}" alt="Logo Téléciné">
+                <div id="telecine-intro" class="hidden sm:block w-[490px] h-[425px] bg-background">
+                    <div id="telecine-intro-image" class="relative h-[260px] bg-neutral-300 overflow-hidden">
+                        <img class="relative w-full h-auto" src="{{ asset('images/metropolis.jpg') }}" alt="Bannière film à la une">
                     </div>
-                    <div class="p-1">
-                        <h1>Lorem Ipsum Dolores</h1>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in varius odio. Nulla pretium metus nec est euismod aliquam. Integer nec ex egestas, convallis diam eu, tempus felis. Mauris maximus libero nec quam suscipit ultrices a sit amet diam.</p>
-                    </div>
+                    <section class="p-1">
+                        <h1>Bienvenue sur Téléciné</h1>
+                        <p>Des films à découvrir, des séances à inventer, des passionnés à rencontrer. Cette app est un point de rencontre pour celles et ceux qui aiment le cinéma au-delà du simple visionnage..</p>
+                    </section>
                 </div>
 
-                <div id="quick-login" class="w-[295px] h-[350px] sm:w-[490px] sm:h-[205px] bg-neutral-300 p-1 bg-primary text-text-night border-double border-4">
-                    <h1>En salle !</h1>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in varius odio. Nulla pretium metus nec est euismod aliquam. </p>
-                </div>            
+                <section id="quick-login" class="w-[295px] h-[350px] sm:w-[490px] sm:h-[205px] bg-neutral-300 p-1 bg-primary text-white">
+                    <h2>En salle !</h2>
+                    <p>Le cinéma, c’est plus qu’un film qui commence et qui finit. C’est des rencontres, des discussions, des moments partagés.</p>
+                    <form method="post" class="mt-6 flex items-center gap-2">
+                        <input type="text" value="{{ last_username }}" name="_username" id="username" class="form-control border-4 border-double p-2 focus:outline-none focus:ring-2 focus:ring-neutral-700 bg-white w-[310px] sm:h-[35px] sm:w-[400px] sm:h-[40px] text-black" autocomplete="username" required autofocus>
+                        <button class="bg-secondary w-[40px] h-[40px] flex font-button background: #ffffffff url({{ asset('icons/movie_go.png') }});" type="submit" aria-label="Se connecter">
+                            <img src="{{ asset('icons/movie_go_white.png') }}" aria-hidden="true" >
+                        </button>
+                    </form>
+                </section>            
             </div>
 
             <div id="column-2" class="justify-self-end">
-                <div id="latest-events" class="relative flex flex-col gap-y-4">
+                <div id="latest-events" class="relative flex flex-col gap-y-4" role ="list">
                     {% for event in events %}
-                    {% include 'partials/_event_container.html.twig'  %}
+                        {% include 'partials/_event_container.html.twig'  %}
                     {% endfor %}
                 </div>
             </div>

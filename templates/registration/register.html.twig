@@ -5,46 +5,58 @@
 {% block main %}
     <main class="flex w-full h-14/20 justify-center mt-4 sm:mt-12 mb-24">
         <div id="core-view" class="relative w-[350px] sm:w-[1000px] flex flex-row justify-center gap-x-4">
-            <div id="column-1" class="relative w-[350px] sm:w-[1000px] flex flex-col justify-center gap-x-4 bg-primary border-double border-4 p-2 ml-4">
+            <div id="column-1" class="relative w-[350px] sm:w-[1000px] flex flex-col justify-center gap-x-4 bg-background p-2 ml-4">
 
                 <h1 class="mb-4">Bienvenue</h1>
                 {{ form_errors(registrationForm) }}
 
-                {{ form_start(registrationForm, {'attr': {'class': 'flex flex-col items-center'}}) }}
+                {{ form_start(registrationForm, {'attr': {'class': 'flex flex-col items-center', 'novalidate': 'novalidate'}}) }}
                     <div class="flex flex-col mb-4">
-                        {{ form_label(registrationForm.user_name, 'Identifiant', {'label_attr': {'class': 'mb-1 text-sm font-semibold text-text-night'}}) }}
-                        {{ form_widget(registrationForm.user_name, {'attr': {'class': 'form-control border-4 border-double p-2 focus:outline-none focus:ring-2 focus:ring-neutral-700 bg-white w-[310px] h-[35px] sm:w-[450px] sm:h-[40px]'}}) }}
+                        {{ form_label(registrationForm.user_name, 'Identifiant', {'label_attr': {'class': 'mb-1 text-sm font-semibold text-white'}}) }}
+                        {{ form_widget(registrationForm.user_name, {'attr': {'class': 'form-control border-4 border-double p-2 focus:outline-none focus:ring-2 focus:ring-neutral-700 bg-white w-[310px] h-[35px] sm:w-[450px] sm:h-[40px] user-invalid:border-red-500 user-invalid:bg-red-100 user-valid:border-secondary-accent user-valid:bg-green-100 user-invalid:text-red-500'}}) }}
+                        <div class="text-pink-600">
                         {{ form_errors(registrationForm.user_name) }}
+                       </div> 
                     </div>
                     <div class="flex flex-col mb-4">
-                        {{ form_label(registrationForm.user_email, 'E-mail', {'label_attr': {'class': 'mb-1 text-sm font-semibold text-text-night'}}) }}
-                        {{ form_widget(registrationForm.user_email, {'attr': {'class': 'form-control border-4 border-double p-2 focus:outline-none focus:ring-2 focus:ring-neutral-700 bg-white w-[310px] h-[35px] sm:w-[450px] sm:h-[40px]'}}) }}
-                        {{ form_errors(registrationForm.user_email) }}
+                        {{ form_label(registrationForm.user_email, 'E-mail', {'label_attr': {'class': 'mb-1 text-sm font-semibold text-white'}}) }}
+                        {{ form_widget(registrationForm.user_email, {'attr': {'class': 'form-control border-4 border-double p-2 focus:outline-none focus:ring-2 focus:ring-neutral-700 bg-white w-[310px] h-[35px] sm:w-[450px] sm:h-[40px] user-invalid:border-red-500 user-invalid:bg-red-200'}}) }}
+                        <div class="text-pink-600">
+                        {{ form_errors(registrationForm.user_email, {'attr': {'class': 'text-red'}}) }}
+                        </div>
                     </div>
                     <div class="flex flex-col mb-4">
-                        {{ form_label(registrationForm.user_dob, 'Date de naissance', {'label_attr': {'class': 'mb-1 text-sm font-semibold text-text-night'}}) }}
+                        {{ form_label(registrationForm.user_dob, 'Date de naissance', {'label_attr': {'class': 'mb-1 text-sm font-semibold text-white'}}) }}
                         {{ form_widget(registrationForm.user_dob, {'attr': {'class': 'form-control border-4 border-double p-2 focus:outline-none focus:ring-2 focus:ring-neutral-700 bg-white w-[310px] h-[35px] sm:w-[450px] sm:h-[40px]'}}) }}
-                        {{ form_errors(registrationForm.user_dob) }}
+                        <div class="text-pink-600">
+                          {{ form_errors(registrationForm.user_dob, {'attr': {'class': 'text-red'}}) }}
+                        </div>
                     </div>
                     <div class="flex flex-col mb-4">
-                        {{ form_label(registrationForm.user_country, 'Pays', {'label_attr': {'class': 'mb-1 text-sm font-semibold text-text-night'}}) }}
+                        {{ form_label(registrationForm.user_country, 'Pays', {'label_attr': {'class': 'mb-1 text-sm font-semibold text-white'}}) }}
                         {{ form_widget(registrationForm.user_country, {'attr': {'class': 'form-control border-4 border-double p-2 focus:outline-none focus:ring-2 focus:ring-neutral-700 bg-white w-[310px] h-[35px] sm:w-[450px] sm:h-[40px]'}}) }}
-                        {{ form_errors(registrationForm.user_country) }}
+                        <div class="text-pink-600">
+                            {{ form_errors(registrationForm.user_country) }}
+                        </div>
                     </div>
                     <div class="flex flex-col mb-4">
-                        {{ form_label(registrationForm.plainPassword.first, 'Mot de passe', {'label_attr': {'class': 'mb-1 text-sm font-semibold text-text-night'}}) }}
+                        {{ form_label(registrationForm.plainPassword.first, 'Mot de passe', {'label_attr': {'class': 'mb-1 text-sm font-semibold text-white'}}) }}
                         {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'form-control border-4 border-double p-2 focus:outline-none focus:ring-2 focus:ring-neutral-700 bg-white w-[310px] h-[35px] sm:w-[450px] sm:h-[40px]'}}) }}
-                        {{ form_errors(registrationForm.plainPassword.first) }}
+                        <div class="text-pink-600">
+                            {{ form_errors(registrationForm.plainPassword.first) }}
+                        </div>
                     </div>
                     <div class="flex flex-col mb-4">
-                        {{ form_label(registrationForm.plainPassword.second, 'Confirmez votre mot de passe', {'label_attr': {'class': 'mb-1 text-sm font-semibold text-text-night'}}) }}
+                        {{ form_label(registrationForm.plainPassword.second, 'Confirmez votre mot de passe', {'label_attr': {'class': 'mb-1 text-sm font-semibold text-white'}}) }}
                         {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'form-control border-4 border-double p-2 focus:outline-none focus:ring-2 focus:ring-neutral-700 bg-white w-[310px] h-[35px] sm:w-[450px] sm:h-[40px]'}}) }}
-                        {{ form_errors(registrationForm.plainPassword.second) }}
+                        <div class="text-pink-600">
+                            {{ form_errors(registrationForm.plainPassword.second) }}
+                        </div>
                     </div>
 
-                    {# <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}"> #}
+                     <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
 
-                    <button type="submit" class="bg-secondary w-[210px] h-[50px] flex items-center justify-center border-4 border-double self-center font-button">Créer mon compte</button>
+                    <button type="submit" class="bg-secondary w-[210px] h-[50px] flex items-center justify-center self-center font-button">Créer mon compte</button>
 
                 {{ form_end(registrationForm) }}        
             </div>
@@ -59,5 +71,70 @@
 
         </div>
     </main>
+
+<script>
+
+  const form = document.getElementById('registration_form');
+
+    form.addEventListener('submit', clientSideVerification);
+    form.addEventListener('input', cleanFieldState);
+
+    function clientSideVerification(event) {
+        let validated = true;
+        let top_invalid_input = null;
+        form.querySelectorAll('input[required], textarea[required], select[required]').forEach(item => {
+            const input = item;
+            let x  = input.value;
+
+            if (x.trim() == "") {
+                input.classList.add('invalid');
+                input.classList.remove('border-dark');
+                if (input.tagName === 'INPUT' || input.tagName === 'TEXTAREA') {                    
+                    if (input.type === 'file') {
+                        Form.querySelector(`[data-verification="${input.name}"]`).textContent = "Veuillez sélectionner un fichier";
+                    }
+                    else {
+                        Form.querySelector(`[data-verification="${input.name}"]`).textContent = "Ce champ doit être renseigné";
+                    }
+                }
+                else if (input.tagName === 'SELECT') {
+                    Form.querySelector(`[data-verification="${input.name}"]`).textContent = "Veuillez sélectionner une ou plusieurs options";
+                }
+                validated = false;
+                if (top_invalid_input === null) {
+                    top_invalid_input = input;
+                }
+            }
+
+            else {
+                input.classList.add('is-valid')
+                input.classList.remove('border-dark')
+            }
+
+        });
+
+        if (!validated) {
+            event.preventDefault()
+            event.stopPropagation()
+            top_invalid_input.focus();
+            top_invalid_input.scrollIntoView({ behavior: "smooth", block: "center"});
+        }
+    }
+
+    function cleanFieldState (event) {
+        const input = event.target;
+        const cleanState = false;
+        let x  = input.value;
+
+        if (x.trim() != "" && cleanState == false) {
+            input.classList.remove('is-invalid');
+            input.classList.add('border-dark');
+            Form.querySelector(`[data-verification="${input.name}"]`).classList.remove('d-block');
+            Form.querySelector(`[data-verification="${input.name}"]`).classList.add('d-none');
+            cleanState = true;
+        }
+
+    }
+</script>
 
 {% endblock %}

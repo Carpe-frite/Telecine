@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\DBAL\Types\Types;
@@ -25,6 +26,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $user_id = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: 'Veuillez compléter ce champ')]
+    #[Assert\Length(min: 5, minMessage: 'Votre identifiant doit contenir au minimum {{ limit }} caractères')]
     private ?string $user_name = null;
 
     /**
@@ -34,6 +37,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank(message: 'Veuillez compléter ce champ')]
+    #[Assert\Email(
+        message: 'L\'adresse {{ value }} n\'est pas valide.',
+    )]
     private ?string $user_email = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]

@@ -9,11 +9,11 @@
                 <h2 class="absolute sm:ml-6 mt-2 text-secondary">{{ event.eventName }}</h2>
                 <div id="event-detail" class="flex w-[350px] h-[100px] sm:w-full sm:h-[500px] bg-primary gap-x-4 border-4 border-double">         
                     <div class="sm:ml-4 sm:mt-16">      
-                        <img class="flex w-[350px] h-[100px] sm:w-72 sm:h-[390px] max-w-[330px] border-4 border-double border-primary shadow-xl sepia-25" src="{{ asset('images/placeholder_poster.webp') }}" alt="Poster de la séance">
+                        <img class="flex w-[350px] h-[100px] sm:w-72 sm:h-[390px] max-w-[330px] border-4 border-double border-primary shadow-xl sepia-25" src="{{ event.eventMoviePicture }}" alt="Poster de la séance">
                     </div>
                     <div class="sm:mr-4 mt-18">
                         <h3 class="inline">{{ event.eventMovie }}</h3> <h4 class="inline">par John Doe</h4>        
-                        <h4>Science-fiction, Aventure | Canada, {{ event.getStrEventMovieYear() }}</h4>            
+                        <h4>{{ event.eventMovieGenre }} | Canada, {{ event.getStrEventMovieYear() }}</h4>            
                         <p>{{ event.eventDetail}}</p>        
                         <h4>Avec</h4> 
                         <hr>
@@ -25,16 +25,16 @@
                                     {% if isHost %}
                                         <li class="relative w-7 sm:w-14 group">
                                         <img src="{{ asset('icons/user_host_icon.png') }}" alt="Icone utilisateur"></i>
-                                        <div class="absolute mt-2 border-double border-4 shadow-xl rounded-lg flex bg-secondary justify-center w-full opacity-0 group-hover:opacity-100 duration-700 ease-in-out">{{ participation.getUser().userName }}</div>
+                                        <div class="absolute mt-2 mr-6 shadow-xl rounded-lg flex bg-accent justify-center w-24 opacity-0 group-hover:opacity-100 duration-700 ease-in-out">{{ participation.getUser().userName }}</div>
                                     {% elseif isParticipant %}
                                         {% if participation.userHasConfirmed== true %}
                                             <li class="relative w-7 sm:w-14 group">
                                             <img src="{{ asset('icons/user_icon.png') }}" alt="Icone utilisateur"></i>
-                                            <div class="absolute mt-2 border-double border-4 shadow-xl rounded-lg flex bg-secondary justify-center w-full opacity-0 group-hover:opacity-100 duration-700 ease-in-out">{{ participation.getUser().userName }}</div>
+                                            <div class="absolute mt-2 mr-6 shadow-xl rounded-lg flex bg-accent justify-center w-24 opacity-0 group-hover:opacity-100 duration-700 ease-in-out">{{ participation.getUser().userName }}</div>
                                         {% elseif participation.userHasConfirmed== false %}
                                             <li class="relative w-7 sm:w-14 group">
                                             <img src="{{ asset('icons/user_not_confirmed_icon.png') }}" alt="Icone utilisateur"></i>
-                                            <div class="absolute mt-2 border-double border-4 shadow-xl rounded-lg flex bg-secondary justify-center w-full opacity-0 group-hover:opacity-100 duration-700 ease-in-out">{{ participation.getUser().userName }}</div>
+                                            <div class="absolute mt-2 mr-6 shadow-xl rounded-lg flex bg-accent justify-center w-24 opacity-0 group-hover:opacity-100 duration-700 ease-in-out">{{ participation.getUser().userName }}</div>
                                         {% endif %}
                                     {% endif %}
                                 {% endfor %}
@@ -43,9 +43,9 @@
             </div>
 
 
-            <div id="event-dashboard" class="flex w-[350px] h-[100px] sm:w-full sm:h-[150px] bg-primary justify-center items-end p-4 gap-x-4 border-4 border-double">
+            <div id="event-dashboard" class="flex w-[350px] h-[100px] sm:w-full sm:h-[150px] bg-primary justify-center items-center p-4 gap-x-4 border-4 border-double">
                 {% if not isAdmin and isHost %}
-                    <div>
+                    <div role="button">
                         <a href="{{path('event_delete_event', { 'id' : event.eventId}) }}">
                             <div class="bg-secondary w-[150px] h-[30px] sm:w-[210px] sm:h-[50px] flex items-center justify-center border-4 border-double font-button">Supprimer la séance</div>
                         </a>
@@ -120,7 +120,7 @@
                 {% endif %}
                 {% if isParticipant %}
                 <div>
-                    <div class="bg-neutral-500 w-[150px] h-[30px] sm:w-[210px] sm:h-[50px]">Vous participez à cette séance !</div>
+                    <div class="bg-accent w-[150px] h-[30px] sm:w-[210px] sm:h-[50px] flex items-center justify-center border-4 border-double font-button">Vous participez à cette séance !</div>
                 </div>
                 {% endif %}
             </div>  
