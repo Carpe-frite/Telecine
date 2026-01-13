@@ -39,38 +39,50 @@ jobs:
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-  tests:
+  symfony-checking-dockerized-db:
     runs-on: ubuntu-latest
-
-    services:
-      mysql:
-        image: mariadb:10.11
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: db_telecine_test
-        options: >-
-          --health-cmd="mysqladmin ping -h localhost -proot"
-          --health-interval=5s
-          --health-timeout=5s
-          --health-retries=30
+    needs: symfony-checking-env-file-and-dependencies
 
     steps:
-      - uses: actions/checkout@v4
+    - uses: actions/checkout@v4
+    - name: Building the container
+      run: docker compose build
+    - name: Running the container
+      run: docker compose up -d
+    - name: Listing the volumes
+      run: docker volume ls
+    - name: Inspecting the volumes
+      run: docker volume inspect telecine_telecine-volume
 
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.4'
-          extensions: pdo_mysql
-
-      - run: composer install --no-interaction --prefer-dist
-
-      - name: Run migrations
+  symfony-unit-feature-tests:
+    runs-on: ubuntu-latest
+    needs: symfony-checking-dockerized-db
+    services:
+      mysql:
+        image: mariadb:latest
         env:
-          DATABASE_URL: mysql://root:root@mysql:3306/db_telecine_test?serverVersion=mariadb-10.11
-        run: php bin/console doctrine:migrations:migrate --env=test --no-interaction
+          MYSQL_DATABASE: db_telecine_test
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3307
 
-      - name: Run tests
-        env:
-          DATABASE_URL: mysql://root:root@mysql:3306/db_telecine_test?serverVersion=mariadb-10.11
-        run: vendor/bin/phpunit --colors --display-errors
+    steps:
 
+    - uses: shivammathur/setup-php@2cb9b829437ee246e9b3cac53555a39208ca6d28
+      with:
+        php-version: '8.4'
+    - uses: actions/checkout@v4
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+    - name: Migrating data into DB
+      env:
+        DATABASE_URL: mysql://root:root@mysql:3307/db_telecine_test?serverVersion=11.8.2-MariaDB&charset=utf8mb4
+      run: php bin/console doctrine:migrations:migrate
+    - name: Execute tests (Unit and Feature tests) via PHPUnit
+      run: vendor/bin/phpunit --colors --display-errors
