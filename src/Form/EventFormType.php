@@ -44,8 +44,7 @@ class EventFormType extends AbstractType
                 'required' => false,
             ]);
         $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) use ($options) {
-            $builtEvent = $event->getData();             
-            $builtEvent->setEventIsArchived(false);   
+            $builtEvent = $event->getData();
         });
     }
 

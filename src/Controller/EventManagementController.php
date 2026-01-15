@@ -27,6 +27,7 @@ class EventManagementController extends AbstractController
             $user = $this->getUser();
             $event->setUser($user);
             $event->setIfAutoValidated($user);
+            $event->setEventIsArchived(false);
             $entityManager->persist($event);
             $entityManager->flush();    
 
