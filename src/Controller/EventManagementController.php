@@ -6,6 +6,7 @@ use App\Entity\Event;
 use App\Entity\TakePartIn;
 use App\Form\EventFormType;
 use App\Service\EventUserChecker;
+use App\Service\postEventCreationTasksFulfiller;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,33 +16,23 @@ use Symfony\Component\Routing\Attribute\Route;
 class EventManagementController extends AbstractController
 {
     #[Route('/create-event', name: 'event_create_event', methods: ['GET','POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, postEventCreationTasksFulfiller $postEventCreationTasksFulfiller): Response
     {
         $event = new Event();
+        $user = $this->getUser();
                     
         $form = $this->createForm(EventFormType::class, $event);
 
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $event= $form->getData();
-            $user = $this->getUser();
-            $event->setUser($user);
-            $event->setIfAutoValidated($user);
-            $event->setEventIsArchived(false);
-            $entityManager->persist($event);
-            $entityManager->flush();    
-
-            $eventParticipation = new TakePartIn();
-            $eventParticipation->setUser($user);
-            $eventParticipation->setEvent($event);
-            $eventParticipation->setUserHasConfirmed(true);
-
-            $entityManager->persist($eventParticipation);
-            $entityManager->flush();
+            $postEventCreationTasksFulfiller->doPostCreationTasks($user, $event, $entityManager);
 
             $this->addFlash('event-created', "Votre séance ". $event->getEventName()." a été créée avec succès");
             return $this->redirectToRoute('default_see_all_events');
-        }        
+        }      
+
         return $this->render('default/create-event.html.twig', ['eventForm' => $form, ]);
     }
 
