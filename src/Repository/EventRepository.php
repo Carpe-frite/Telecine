@@ -49,7 +49,7 @@ public function findEventsITakePartIn(User $user)
 
     public function findEventsByGenre($selected_genre): array {
         $entityManager = $this->getEntityManager();
-        $dql = $entityManager->createQuery('SELECT e FROM App\Entity\Event e WHERE e.event_movie_genre = :selected_genre')->setParameter('selected_genre', $selected_genre);
+        $dql = $entityManager->createQuery('SELECT e FROM App\Entity\Event e WHERE e.event_movie_genre = :selected_genre AND e.event_is_validated = true')->setParameter('selected_genre', $selected_genre);
         return $dql->getResult();
     }
 
