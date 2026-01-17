@@ -28,8 +28,25 @@ class TMDBApiController extends AbstractController
             ],
         ]);
 
-        $data = $response->toArray();
+        $fetchedData = $response->toArray();
 
-        return new JsonResponse(['results' => $data['results'] ?? []]);
+        return new JsonResponse(['results' => $fetchedData['results'] ?? []]);
+    }
+
+    #[Route('/api/tmdb/searchmoviegenre', name: 'tmdbapi_fetchmoviegenre', methods: ['GET'])]
+    public function getMovieGenre(HttpClientInterface $client): JsonResponse {
+        
+        $api_key = $_ENV['TMDB_API_KEY'];
+
+        $response = $client->request('GET', 'https://api.themoviedb.org/3/genre/movie/list', [
+            'query' => [
+                'api_key' => $api_key,
+                'language' => 'fr-FR',
+            ],
+        ]);
+
+        $fetchedData = $response->toArray();
+
+        return new JsonResponse(['genres' => $fetchedData['genres'] ?? []]);
     }
 }

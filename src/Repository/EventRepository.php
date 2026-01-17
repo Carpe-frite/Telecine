@@ -22,6 +22,12 @@ class EventRepository extends ServiceEntityRepository
         return $newlyAddedEvents;
     }
 
+
+    public function findNotValidatedEvents() {
+        $notValidatedEvents = $this->findBy(['event_is_validated' => false], ['event_date' => 'DESC']);
+        return $notValidatedEvents;
+    }
+
     public function findAllValidatedEvents() {
         $allValidatedEvents = $this->findBy(['event_is_validated' => true], ['event_date' => 'DESC']);
         return $allValidatedEvents;

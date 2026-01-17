@@ -6,7 +6,7 @@ use App\Entity\Event;
 use App\Entity\TakePartIn;
 use App\Form\EventFormType;
 use App\Service\EventUserChecker;
-use App\Service\postEventCreationTasksFulfiller;
+use App\Service\PostEventCreationTasksHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class EventManagementController extends AbstractController
 {
     #[Route('/create-event', name: 'event_create_event', methods: ['GET','POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, postEventCreationTasksFulfiller $postEventCreationTasksFulfiller): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, PostEventCreationTasksHandler $PostEventCreationTasksHandler): Response
     {
         $event = new Event();
         $user = $this->getUser();
@@ -27,9 +27,9 @@ class EventManagementController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $event= $form->getData();
-            $postEventCreationTasksFulfiller->doPostCreationTasks($user, $event, $entityManager);
+            $PostEventCreationTasksHandler->doPostCreationTasks($user, $event);
 
-            $this->addFlash('event-created', "Votre séance ". $event->getEventName()." a été créée avec succès");
+            $this->addFlash('event-managed', "Votre séance ". $event->getEventName()." a été créée avec succès");
             return $this->redirectToRoute('default_see_all_events');
         }      
 
@@ -107,7 +107,7 @@ class EventManagementController extends AbstractController
 
         $event->setEventIsValidated(true);
         $entityManager->flush();    
-        $this->addFlash('Séance validée', "La séance a été validée avec succès");
+        $this->addFlash('event-managed', "La séance ". $event->getEventName()." a été validée");
         return $this->redirectToRoute('default_admin');        
     }
 

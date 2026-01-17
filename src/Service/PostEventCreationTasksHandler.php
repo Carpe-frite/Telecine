@@ -1,10 +1,16 @@
 <?php
 namespace App\Service;
 use App\Entity\TakePartIn;
+use Doctrine\ORM\EntityManagerInterface;
 
-class postEventCreationTasksFulfiller {
+class PostEventCreationTasksHandler {
 
-    public function doPostCreationTasks($user, $event, $entityManager) {
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+    ) {
+    }
+
+    public function doPostCreationTasks($user, $event) {
             $event->setUser($user);
             $event->setIfAutoValidated($user);
             $event->setEventIsArchived(false);
@@ -14,10 +20,8 @@ class postEventCreationTasksFulfiller {
             $eventParticipation->setEvent($event);
             $eventParticipation->setUserHasConfirmed(true);
 
-            $entityManager->persist($event);
-            $entityManager->persist($eventParticipation);
-            $entityManager->flush();
+            $this->entityManager->persist($event);
+            $this->entityManager->persist($eventParticipation);
+            $this->entityManager->flush();
     }
-
-
 }

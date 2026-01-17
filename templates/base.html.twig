@@ -14,7 +14,7 @@
         {% endblock %}
     </head>
     <body class="w-full h-full min-h-screen bg-gradient-to-br from-orange-200 to-sky-200">
-        {% for message in app.flashes('event-created') %}
+        {% for message in app.flashes('event-managed') %}
             <div class="absolute bg-secondary-accent border-t-4 border-teal-500 text-teal-900 px-4 py-3 shadow-md bottom-0" role="alert">
                 {{ message }}
             </div>

@@ -24,7 +24,7 @@ class DefaultController extends AbstractController
     #[Route('/admin', name: 'default_admin', methods: ['GET'])]
     public function admin(EventRepository $eventRepository)
     {
-        $events = $eventRepository->findBy(['event_is_validated' => false], ['event_date' => 'DESC']);
+        $events = $eventRepository->findNotValidatedEvents();
         $allMoviegenres = $eventRepository->findAllGenresInEventMovies();
         return $this->render('default/admin.html.twig', ['events' => $events, 'movie_genres' => $allMoviegenres]);
     }
